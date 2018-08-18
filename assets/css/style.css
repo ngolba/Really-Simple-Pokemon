@@ -26,6 +26,11 @@ img {
     /* float: left; */
 }
 
-p {
+p, button {
     font-family: pokemonBody;
+}
+
+.oak {
+    height: 190px;
+    width: auto;
 }

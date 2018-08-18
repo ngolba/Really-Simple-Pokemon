@@ -14,6 +14,8 @@ $(document).ready(function(){
     changeSprite('#squirtle', 'squirtle');
     changeSprite('#pikachu', 'pikachu');
 
+    $('#areSure').hide();
+
 
     var generateRandoms = function(min, max) {
         return Math.random()*(max-min)+min;
@@ -63,6 +65,12 @@ $(document).ready(function(){
     generateIvs(bulbasaur);
     generateIvs(squirtle);
     generateIvs(pikachu);
+
+    $('.charSelect').click(function(event){
+        $('#pokeChoice').text('');
+        $("#areSure").show();
+
+    })
 
 
 
