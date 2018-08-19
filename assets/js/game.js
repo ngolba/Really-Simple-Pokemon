@@ -38,6 +38,7 @@ $(document).ready(function(){
 
     var charmander = {
         name: 'Charmander',
+        index: 0,
         hp: 39,
         att: 52,
         def: 43,
@@ -46,6 +47,7 @@ $(document).ready(function(){
 
     var bulbasaur = {
         name: 'Bulbasaur',
+        index: 1,
         hp: 45,
         att: 49,
         def: 65,
@@ -54,6 +56,7 @@ $(document).ready(function(){
 
     var squirtle = {
         name: 'Squirtle',
+        index: 2,
         hp: 44,
         att: 48,
         def: 65,
@@ -62,6 +65,7 @@ $(document).ready(function(){
 
     var pikachu = {
         name: 'Pikachu',
+        index: 3,
         hp: 35,
         att: 55,
         def: 30,
@@ -72,6 +76,7 @@ $(document).ready(function(){
     generateIvs(squirtle);
     generateIvs(pikachu);
 
+    var pokemonArray = [charmander, bulbasaur, squirtle, pikachu];
     var userPokemon;
     var pokemonChosen = false;
 
@@ -79,13 +84,13 @@ $(document).ready(function(){
     $('.charSelect').click(function(event){
         $('#pokeChoice').text($(this).attr('name'));
         $("#areSure").show();
-        userPokemon = $(this).attr('name');
+        userPokemon = pokemonArray[$(this).attr('index')];
         console.log(userPokemon);
     });
     
     $('.yesNo').click(function(event){
         if ($(this).attr('value') === 'Yes'){
-            $('#oakText').html('<p class="card-body pb-0">' + 'Oak: Your pokémon will be ' + userPokemon + '.' + '<p class="card-body pb-0">' + 'Choose your opponent.' + '</p>');
+            $('#oakText').html('<p class="card-body pb-0">' + 'Oak: Your pokémon will be ' + userPokemon.name + '.' + '<p class="card-body pb-0">' + 'Choose your opponent.' + '</p>');
             $('#areSure').hide();
             pokemonChosen = true;
         } else {
