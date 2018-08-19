@@ -15,7 +15,7 @@
     </div>
 
     <div class = "row">
-        <div class="col-3 card charSelect">
+        <div class="col-3 card charSelect" name="Charmander">
             <div class="row">
                 <div class="col-6">
                     <img id="charmander" src="assets/images/charmander.png" height="100px" width="100px">
@@ -33,7 +33,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-3 card charSelect">
+        <div class="col-3 card charSelect" name="Bulbasaur">
             <div class="row">
                 <div class="col-6">
                     <img id="bulbasaur" src="assets/images/bulbasaur.png" height="100px" width="100px">
@@ -51,13 +51,13 @@
                 </div>
             </div> 
         </div>
-        <div class="col-3 card charSelect">
+        <div class="col-3 card charSelect" name="Squirtle">
             <div class="row">
                 <div class="col-6">
                     <img id="squirtle" src="assets/images/squirtle.png" height="100px" width="100px">
                     
                 </div>
-                <div class="col-6 my-2"> 
+                <div class="col-6"> 
                     <p>HP: 44</p>
                     <p>Att: 48</p>
                     <p>Def: 65</p>
@@ -70,7 +70,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-3 card charSelect">
+        <div class="col-3 card charSelect" name="Pikachu">
             <div class="row">
                 <div class="col-6">
                     <img id="pikachu" src="assets/images/pikachu.png" height="100px" width="100px">
@@ -90,28 +90,32 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-3 mx-0">
-            <div class="card">
+        <div class="col-3 p-0">
+            <div class="card w-100">
                 <img class="oak" src="assets/images/oak.jpg">
             </div>  
         </div>
-        <div class="col-3">
-            <div class="card">
-                <p class="card-body pb-0">Oak: Here, take one of these rare pokemon.</p>
-                <p class="card-body py-0">Choose wisely. You may only choose one!</p>
+        <div class="col-3 p-0">
+            <div class="card" id="oakText">
+                <!-- <p class="card-body pb-0">Oak: Here, take one of these rare pokemon.</p>
+                <p class="card-body py-0">Choose wisely. You may only choose one!</p> -->
             </div>
         </div>
-        <div class="col-3">
+        <div class="col-3 p-0">
             <div class="card" id="areSure">
-                <p class="card-body">You've chosen <span id="pokeChoice"></span></p>
-                <p class="card-body" >Are you sure?</p>
-                <button type="button" class="btn-light">Yes</button>
-                <button type="button" class="btn-light">No</button>
+                <p class="card-text p-2">You've chosen <span id="pokeChoice"></span></p>
+                <p class="card-text p-2 yesNo" >Are you sure?</p>
+                <button type="button" class="btn-light yesNo" value="Yes">Yes</button>
+                <button type="button" class="btn-light yesNo" value="No">No</button>
                 
             </div>
+        </div> 
+        <div class="col 3 p-0">
+            <div class="card" id="opponentChoice">
+                <p class="card-text p-2"></p>
+            </div>
         </div>
-        
-    </div>
+     </div>
     
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script src="assets/js/game.js"></script>

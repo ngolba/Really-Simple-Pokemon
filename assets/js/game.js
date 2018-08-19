@@ -15,6 +15,8 @@ $(document).ready(function(){
     changeSprite('#pikachu', 'pikachu');
 
     $('#areSure').hide();
+    $('#oakText').html('<p class="card-body pb-0">' + 'Oak: Here, take one of these rare pokémon.' + '</p>' +
+    '<p class="card-body py-0">' + 'Choose wisely. You may only choose one! ' + '</p>');
 
 
     var generateRandoms = function(min, max) {
@@ -35,6 +37,7 @@ $(document).ready(function(){
     }
 
     var charmander = {
+        name: 'Charmander',
         hp: 39,
         att: 52,
         def: 43,
@@ -42,6 +45,7 @@ $(document).ready(function(){
     }
 
     var bulbasaur = {
+        name: 'Bulbasaur',
         hp: 45,
         att: 49,
         def: 65,
@@ -49,6 +53,7 @@ $(document).ready(function(){
     }
 
     var squirtle = {
+        name: 'Squirtle',
         hp: 44,
         att: 48,
         def: 65,
@@ -56,6 +61,7 @@ $(document).ready(function(){
     }
 
     var pikachu = {
+        name: 'Pikachu',
         hp: 35,
         att: 55,
         def: 30,
@@ -66,11 +72,35 @@ $(document).ready(function(){
     generateIvs(squirtle);
     generateIvs(pikachu);
 
-    $('.charSelect').click(function(event){
-        $('#pokeChoice').text('');
-        $("#areSure").show();
+    var userPokemon;
+    var pokemonChosen = false;
 
-    })
+
+    $('.charSelect').click(function(event){
+        $('#pokeChoice').text($(this).attr('name'));
+        $("#areSure").show();
+        userPokemon = $(this).attr('name');
+        console.log(userPokemon);
+    });
+    
+    $('.yesNo').click(function(event){
+        if ($(this).attr('value') === 'Yes'){
+            $('#oakText').html('<p class="card-body pb-0">' + 'Oak: Your pokémon will be ' + userPokemon + '.' + '<p class="card-body pb-0">' + 'Choose your opponent.' + '</p>');
+            $('.yesNo').hide();
+            pokemonChosen = true;
+        } else {
+            $('#areSure').hide();
+        }
+    });
+
+    console.log(pokemonChosen);
+    
+    
+    
+    console.log(userPokemon);
+    console.log(pokemonChosen);
+
+ 
 
 
 
