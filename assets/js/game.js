@@ -86,7 +86,7 @@ $(document).ready(function(){
     $('.yesNo').click(function(event){
         if ($(this).attr('value') === 'Yes'){
             $('#oakText').html('<p class="card-body pb-0">' + 'Oak: Your pokémon will be ' + userPokemon + '.' + '<p class="card-body pb-0">' + 'Choose your opponent.' + '</p>');
-            $('.yesNo').hide();
+            $('#areSure').hide();
             pokemonChosen = true;
         } else {
             $('#areSure').hide();
