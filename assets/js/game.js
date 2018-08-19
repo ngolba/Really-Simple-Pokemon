@@ -78,7 +78,9 @@ $(document).ready(function(){
 
     var pokemonArray = [charmander, bulbasaur, squirtle, pikachu];
     var userPokemon;
-    var pokemonChosen = false;
+    var opponentPokemon;
+    var userPokemonChosen = false;
+    var opponentPokemonChosen = false;
 
 
     $('.charSelect').click(function(event){
@@ -86,24 +88,50 @@ $(document).ready(function(){
         $("#areSure").show();
         userPokemon = pokemonArray[$(this).attr('index')];
         console.log(userPokemon);
-    });
-    
-    $('.yesNo').click(function(event){
-        if ($(this).attr('value') === 'Yes'){
-            $('#oakText').html('<p class="card-body pb-0">' + 'Oak: Your pokémon will be ' + userPokemon.name + '.' + '<p class="card-body pb-0">' + 'Choose your opponent.' + '</p>');
-            $('#areSure').hide();
-            pokemonChosen = true;
-        } else {
-            $('#areSure').hide();
-        }
-    });
 
-    console.log(pokemonChosen);
+
+        $('.yesNo').click(function(event){
+            if ($(this).attr('value') === 'Yes'){
+                $('#oakText').html('<p class="card-body pb-0">' + 'Oak: Your pokémon will be ' + userPokemon.name + '.' + '<p class="card-body pb-0">' + 'Choose your opponent.' + '</p>');
+                $('#areSure').hide();
+                userPokemonChosen = true;
+                // $(this).attr('userPokemon', 'true');
+                // if ($('.charSelect').attr('userPokemon') === false){
+                //     $('.charSelect').addClass('opponentSelect');
+                // }
+                $('.charSelect').off('click');
+                
+            } else {
+                $('#areSure').hide();
+            }
+    });
+});
+
+    // $('.opponentSelect').click(function(event){
+    //     $('#pokeChoice').text($(this).attr('name'));
+    //     $("#areSure").show();
+    //     opponentPokemon = pokemonArray[$(this).attr('index')];
+    //     console.log(opponentPokemon);
+
+    //     $('.yesNo').click(function(event){
+    //         if ($(this).attr('value') === 'Yes'){
+    //             $('#oakText').html('<p class="card-body pb-0">' + 'Oak: Your opponent\'s pokémon will be ' + opponentPokemon.name + '.' + '<p class="card-body pb-0">' + 'Choose your opponent.' + '</p>');
+    //             $('#areSure').hide();
+    //             opponentPokemonChosen = true;
+    //             $('.charSelect').off('click')
+    //         } else {
+    //             $('#areSure').hide();
+    //         }
+    // });
+    // });
+
+
+
+
     
     
     
     console.log(userPokemon);
-    console.log(pokemonChosen);
 
  
 
