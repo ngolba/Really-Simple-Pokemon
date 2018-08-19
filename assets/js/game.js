@@ -88,6 +88,9 @@ $(document).ready(function(){
         $("#areSure").show();
         userPokemon = pokemonArray[$(this).attr('index')];
         console.log(userPokemon);
+        $(this).attr('userPokemon', true);
+        $(this).siblings('.charSelect').attr('userPokemon', false);
+
 
 
         $('.yesNo').click(function(event){
@@ -97,14 +100,35 @@ $(document).ready(function(){
                 userPokemonChosen = true;
                 // $(this).attr('userPokemon', 'true');
                 // if ($('.charSelect').attr('userPokemon') === false){
-                //     $('.charSelect').addClass('opponentSelect');
+                // $('.charSelect').siblings('.charSelect').addClass('opponentSelect');
                 // }
                 $('.charSelect').off('click');
                 
             } else {
                 $('#areSure').hide();
+                userPokemon = '';
+                console.log(userPokemon);
             }
     });
+
+    $('.opponentSelect').click(function(event){
+        $('#pokeChoice').text($(this).attr('name'));
+        $("#areSure").show();
+        opponentPokemon = pokemonArray[$(this).attr('index')];
+        console.log(opponentPokemon);
+
+        $('.yesNo').click(function(event){
+            if ($(this).attr('value') === 'Yes'){
+                $('#oakText').html('<p class="card-body pb-0">' + 'Oak: Your opponent\'s pokémon will be ' + opponentPokemon.name + '.' + '<p class="card-body pb-0">' + 'Choose your opponent.' + '</p>');
+                $('#areSure').hide();
+                opponentPokemonChosen = true;
+                $('.charSelect').off('click')
+            } else {
+                $('#areSure').hide();
+            }
+    });
+    });
+
 });
 
     // $('.opponentSelect').click(function(event){
