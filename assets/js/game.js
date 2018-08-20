@@ -44,46 +44,34 @@ var battleRoster = [userPokemon, opponentPokemon];
 var userPokemonChosen = false;
 var opponentPokemonChosen = false;
 var index = 4;
+var changeSprite = function (monId, monName) {
+    $(monId).hover(function() {
+        $(monId).attr('src', 'assets/images/' + monName + '.gif');
+    },
+    function() {
+        $(monId).attr('src', 'assets/images/' + monName + '.png');
+    });
+}
+var generateRandoms = function(min, max) {
+    return Math.random()*(max-min)+min;
 
-$(document).ready(function(){
-    
-    var changeSprite = function (monId, monName) {
-        $(monId).hover(function() {
-            $(monId).attr('src', 'assets/images/' + monName + '.gif');
-        },
-        function() {
-            $(monId).attr('src', 'assets/images/' + monName + '.png');
-        });
-    }
-
-    changeSprite('#bulbasaur', 'bulbasaur');
-    changeSprite('#charmander', 'charmander');
-    changeSprite('#squirtle', 'squirtle');
-    changeSprite('#pikachu', 'pikachu');
-
-    // $('#areSure').hide();
-    $('#oakText').html('<p class="card-body pb-0">' + 'Oak: Here, take one of these rare pokémon.' + '</p>' +
-    '<p class="card-body py-0">' + 'Choose wisely. You may only choose one! ' + '</p>');
+}
 
 
-    var generateRandoms = function(min, max) {
-        return Math.random()*(max-min)+min;
+var generateIvs = function (mon) {
+    mon.hp *= generateRandoms(.75, 1.25);
+    mon.hp = Math.trunc(mon.hp);
+    mon.att *= generateRandoms(.75, 1.25);
+    mon.att = Math.trunc(mon.att);
+    mon.def *= generateRandoms(.75, 1.25);
+    mon.def = Math.trunc(mon.def);
+    mon.speed *= generateRandoms(.75, 1.25);
+    mon.speed = Math.trunc(mon.speed);
+}
 
-    }
 
+var startGame = function(){
 
-    var generateIvs = function (mon) {
-        mon.hp *= generateRandoms(.75, 1.25);
-        mon.hp = Math.trunc(mon.hp);
-        mon.att *= generateRandoms(.75, 1.25);
-        mon.att = Math.trunc(mon.att);
-        mon.def *= generateRandoms(.75, 1.25);
-        mon.def = Math.trunc(mon.def);
-        mon.speed *= generateRandoms(.75, 1.25);
-        mon.speed = Math.trunc(mon.speed);
-    }
-
-    
     generateIvs(charmander);
     generateIvs(bulbasaur);
     generateIvs(squirtle);
@@ -105,15 +93,13 @@ $(document).ready(function(){
             if($(this).attr('value') === 'Yes') {
                 $('.charSelect').each(function(event){
                     if ($(this).attr('userPokemon') === 'true'){
-                        console.log($(this).attr('index'));
                         index = $(this).attr('index');
-                        console.log(index);
                         userPokemon = pokemonArray[index];
-                        console.log(pokemonArray[index]);
                         userPokemonChosen = 'true';
+                        $(this).addClass('border border-dark');
                         $('.charSelect').off('click');
                         $('#areSure').hide();
-                        console.log(userPokemon);
+                        $('#oakText').html('<p class="card-body pb-0">' + 'Oak: Your pokémon will be ' + userPokemon.name + '.' + '<p class="card-body pb-0">' + 'Choose your opponent.' + '</p>');
                     }else {
                         $(this).addClass('opponentChoice');
                     }
@@ -123,13 +109,36 @@ $(document).ready(function(){
             }
             if(userPokemonChosen === 'true'){
                 console.log("Chosen");
-            } else {
-                console.log("failure");
+                console.log(userPokemon); 
             }
         });
     });
 
-    console.log(userPokemon);
+    $('.opponentChoice').click(function() {
+        var opponentPokemonName = $(this).attr('name');
+        $('#areSure').show()
+        $('#pokeChoice').text(opponentPokemonName);
+
+    })
+    
+
+};
+
+$(document).ready(function(){
+    
+  
+    changeSprite('#bulbasaur', 'bulbasaur');
+    changeSprite('#charmander', 'charmander');
+    changeSprite('#squirtle', 'squirtle');
+    changeSprite('#pikachu', 'pikachu');
+
+    $('#oakText').html('<p class="card-body pb-0">' + 'Oak: Here, take one of these rare pokémon.' + '</p>' +
+    '<p class="card-body py-0">' + 'Choose wisely. You may only choose one! ' + '</p>');
+
+    startGame();
+    
+    
+    
     
 
     // $('.charSelect').each(function(){
