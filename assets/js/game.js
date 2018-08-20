@@ -1,3 +1,50 @@
+
+ 
+
+  var charmander = {
+    name: 'Charmander',
+    index: 0,
+    hp: 39,
+    att: 52,
+    def: 43,
+    speed: 65
+}
+
+var bulbasaur = {
+    name: 'Bulbasaur',
+    index: 1,
+    hp: 45,
+    att: 49,
+    def: 65,
+    speed: 45
+}
+
+var squirtle = {
+    name: 'Squirtle',
+    index: 2,
+    hp: 44,
+    att: 48,
+    def: 65,
+    speed: 43
+}
+
+var pikachu = {
+    name: 'Pikachu',
+    index: 3,
+    hp: 35,
+    att: 55,
+    def: 30,
+    speed: 90
+}
+
+var pokemonArray = [charmander, bulbasaur, squirtle, pikachu];
+var userPokemon = {};
+var opponentPokemon;
+var battleRoster = [userPokemon, opponentPokemon];
+var userPokemonChosen = false;
+var opponentPokemonChosen = false;
+var index = 4;
+
 $(document).ready(function(){
     
     var changeSprite = function (monId, monName) {
@@ -36,62 +83,65 @@ $(document).ready(function(){
         mon.speed = Math.trunc(mon.speed);
     }
 
-    var charmander = {
-        name: 'Charmander',
-        index: 0,
-        hp: 39,
-        att: 52,
-        def: 43,
-        speed: 65
-    }
-
-    var bulbasaur = {
-        name: 'Bulbasaur',
-        index: 1,
-        hp: 45,
-        att: 49,
-        def: 65,
-        speed: 45
-    }
-
-    var squirtle = {
-        name: 'Squirtle',
-        index: 2,
-        hp: 44,
-        att: 48,
-        def: 65,
-        speed: 43
-    }
-
-    var pikachu = {
-        name: 'Pikachu',
-        index: 3,
-        hp: 35,
-        att: 55,
-        def: 30,
-        speed: 90
-    }
+    
     generateIvs(charmander);
     generateIvs(bulbasaur);
     generateIvs(squirtle);
     generateIvs(pikachu);
 
-    var pokemonArray = [charmander, bulbasaur, squirtle, pikachu];
-    var userPokemon;
-    var opponentPokemon;
-    var battleRoster = [userPokemon, opponentPokemon];
-    var userPokemonChosen = false;
-    var opponentPokemonChosen = false;
+  
 
 
-    $('.charSelect').on('click', function() {
-        userPokemon = (pokemonArray[$(this).attr('index')]);
+
+    $('.charSelect').click(function() {
+        // userPokemon = (pokemonArray[$(this).attr('index')]);
+        var userPokemonName = $(this).attr('name');
         $('#areSure').show()
-        $('#pokeChoice').text(userPokemon.name);
+        $('#pokeChoice').text(userPokemonName);
+        $(this).attr('userPokemon', true);
+        $(this).siblings('.charSelect').attr('userPokemon', false);
+
+        $('.yesNoBttn').click(function() {
+            if($(this).attr('value') === 'Yes') {
+                $('.charSelect').each(function(event){
+                    if ($(this).attr('userPokemon') === 'true'){
+                        console.log($(this).attr('index'));
+                        index = $(this).attr('index');
+                        console.log(index);
+                        userPokemon = pokemonArray[index];
+                        console.log(pokemonArray[index]);
+                        userPokemonChosen = 'true';
+                        $('.charSelect').off('click');
+                        $('#areSure').hide();
+                        console.log(userPokemon);
+                    }else {
+                        $(this).addClass('opponentChoice');
+                    }
+                });
+            }else  {
+                $('#areSure').hide();
+            }
+            if(userPokemonChosen === 'true'){
+                console.log("Chosen");
+            } else {
+                console.log("failure");
+            }
+        });
     });
 
-    userPokemon = $('#pokeChoice').text();
     console.log(userPokemon);
+    
+
+    // $('.charSelect').each(function(){
+    //     console.log($(this).attr('name'));
+    //     if ($(this).attr('userPokemon') === true){
+    //         userPokemon = pokemonArray[$(this).attr('index')];
+    //         console.log(userPokemon);
+    //     }else {
+    //         console.log("Failure");
+    //     }
+    // });
+
 
    
 
@@ -196,3 +246,4 @@ $(document).ready(function(){
 
 
 })
+
