@@ -34,3 +34,7 @@ p, button {
     height: 190px;
     width: auto;
 }
+
+#areSure {
+    display: none;
+}
