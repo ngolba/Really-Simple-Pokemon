@@ -178,14 +178,14 @@ var opponentSelect = function() {
 var battle = function() {
     $('#startButton').click(function() {
         $('.startingSetup').html('');
-        var userPokemonImg = 
-        placeSprites()
+        // var userPokemonImg = 
+        // placeSprites();
         $('.topRow').html(
             '<div class="row w-100">' +
                 '<div class="col-6 mx-auto">' +
                 '<div class="card">' +
                     '<img class="w-100" src="assets/images/PBC.png" id="arenaImg">' +
-                    '<img class="userPokemonImg">' +
+                    // '<img class="userPokemonImg">' +
                 '</div>' +
                 '</div>' +
             '</div>'
