@@ -44,6 +44,7 @@ var battleRoster = [userPokemon, opponentPokemon];
 var userPokemonChosen = 'false';
 var opponentPokemonChosen = 'false';
 var index = 4;
+
 var changeSprite = function (monId, monName) {
     $(monId).hover(function() {
         $(monId).attr('src', 'assets/images/' + monName + '.gif');
@@ -69,6 +70,10 @@ var generateIvs = function (mon) {
     mon.speed = Math.trunc(mon.speed);
 }
 
+var placeSprites = function(userPokemon, opponentPokemon) {
+    $(monId).attr('src', 'assets/images/' + monName + '.gif');
+    
+}
 
 var startGame = function(){
 
@@ -142,9 +147,15 @@ var opponentSelect = function() {
                             opponentPokemon = pokemonArray[index];
                             opponentPokemonChosen = 'true';
                             console.log(opponentPokemon);
-                            $(this).addClass('border border-danger').removeClass('opponentChoice');
+                            $(this).addClass('border border-danger col-4').removeClass('opponentChoice col-3');
                             $('#areSure').hide();
                             $('#oakText').html('<p class="card-body pb-0">' + 'Oak: Your opponent\'s pokémon will be ' + opponentPokemon.name + '.' + '<p class="card-body pb-0">' + 'Click Start to start battle!' + '</p>' + '<button type="button" class="btn btn-danger" id="startButton">' + 'Start!' + '</button>');
+                            
+                            $('.character').each(function() {
+                                $(this).addClass('col-4').removeClass('col-3');
+                            })
+                            // $('.startingSetup').addClass('justify-content-center');
+
                             battle();
                             // return;
                         }else {
