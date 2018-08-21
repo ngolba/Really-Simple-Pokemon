@@ -41,8 +41,8 @@ var pokemonArray = [charmander, bulbasaur, squirtle, pikachu];
 var userPokemon = {};
 var opponentPokemon;
 var battleRoster = [userPokemon, opponentPokemon];
-var userPokemonChosen = false;
-var opponentPokemonChosen = false;
+var userPokemonChosen = 'false';
+var opponentPokemonChosen = 'false';
 var index = 4;
 var changeSprite = function (monId, monName) {
     $(monId).hover(function() {
@@ -89,6 +89,7 @@ var startGame = function(){
         $(this).attr('userPokemon', true);
         $(this).siblings('.charSelect').attr('userPokemon', false);
 
+        if(userPokemonChosen === 'false'){
         $('.yesNoBttn').click(function() {
             if($(this).attr('value') === 'Yes') {
                 $('.charSelect').each(function(event){
@@ -96,32 +97,86 @@ var startGame = function(){
                         index = $(this).attr('index');
                         userPokemon = pokemonArray[index];
                         userPokemonChosen = 'true';
-                        $(this).addClass('border border-dark');
-                        $('.charSelect').off('click');
+                        $(this).addClass('border border-dark').removeClass('charSelect');
                         $('#areSure').hide();
                         $('#oakText').html('<p class="card-body pb-0">' + 'Oak: Your pokémon will be ' + userPokemon.name + '.' + '<p class="card-body pb-0">' + 'Choose your opponent.' + '</p>');
+                        $(this).off('click');
+                        return;
                     }else {
-                        $(this).addClass('opponentChoice');
+                        $(this).addClass('opponentChoice').removeClass('charSelect').removeAttr('userPokemon');
                     }
                 });
             }else  {
                 $('#areSure').hide();
             }
-            if(userPokemonChosen === 'true'){
-                console.log("Chosen");
-                console.log(userPokemon); 
-            }
-        });
-    });
+            })
+        } else{
+            $('.yesNoBttn').removeClass('yesNoBttn').addClass('yesNoOpp');
+            opponentSelect();
+        }  
+    });    
+};
+
+
+var opponentSelect = function() {
+    $('.opponentChoice').each( function() {
+        $(this).removeAttr('userPokemon')});
 
     $('.opponentChoice').click(function() {
+        
+        
         var opponentPokemonName = $(this).attr('name');
-        $('#areSure').show()
+        $('#areSure').show();
         $('#pokeChoice').text(opponentPokemonName);
+        $(this).attr('opponentPokemon', true);
+        $(this).siblings('.opponentChoice').attr('opponentPokemon', false);
+
+        if(opponentPokemonChosen === 'false'){
+            $('.yesNoOpp').click(function() {
+                console.log(opponentPokemonChosen);
+                if($(this).attr('value') === 'Yes') {
+                    $('.opponentChoice').each(function(event){
+                        if ($(this).attr('opponentPokemon') === 'true'){
+                            console.log("Made it here");
+                            index = $(this).attr('index');
+                            opponentPokemon = pokemonArray[index];
+                            opponentPokemonChosen = 'true';
+                            console.log(opponentPokemon);
+                            $(this).addClass('border border-danger').removeClass('opponentChoice');
+                            $('#areSure').hide();
+                            $('#oakText').html('<p class="card-body pb-0">' + 'Oak: Your opponent\'s pokémon will be ' + opponentPokemon.name + '.' + '<p class="card-body pb-0">' + 'Click Start to start battle!' + '</p>' + '<button type="button" class="btn btn-danger" id="startButton">' + 'Start!' + '</button>');
+                            battle();
+                            // return;
+                        }else {
+                            $(this).hide();
+                        }
+                    });
+                }else  {
+                    $('#areSure').hide();
+                }
+                }) 
+            // } else {
+            //     console.log('failure');
+            //     battle();
+            } 
 
     })
-    
+};
 
+var battle = function() {
+    $('#startButton').click(function() {
+        $('.startingSetup').html('');
+        $('.topRow').html(
+            '<div class="row w-100">' +
+                '<div class="col-6 mx-auto">' +
+                '<div class="card">' +
+                    '<img class="w-100" src="assets/images/PBC.png" id="arenaImg">' +
+                '</div>' +
+                '</div>' +
+            '</div>'
+
+        );
+    })
 };
 
 $(document).ready(function(){
@@ -135,8 +190,11 @@ $(document).ready(function(){
     $('#oakText').html('<p class="card-body pb-0">' + 'Oak: Here, take one of these rare pokémon.' + '</p>' +
     '<p class="card-body py-0">' + 'Choose wisely. You may only choose one! ' + '</p>');
 
-    startGame();
     
+    startGame();
+    $('.yesNoBttn').click(function() {
+        console.log("clicked");
+    })
     
     
     
@@ -254,5 +312,4 @@ $(document).ready(function(){
 
 
 
-})
-
+});

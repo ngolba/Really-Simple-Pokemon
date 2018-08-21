@@ -38,3 +38,10 @@ p, button {
 #areSure {
     display: none;
 }
+
+#arenaImg {
+    margin: 20px auto; 
+    height: 500px;
+    width: 500px; 
+    /* float: right; */
+}
