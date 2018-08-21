@@ -70,8 +70,9 @@ var generateIvs = function (mon) {
     mon.speed = Math.trunc(mon.speed);
 }
 
-var placeSprites = function(userPokemon, opponentPokemon) {
-    $(monId).attr('src', 'assets/images/' + monName + '.gif');
+var placeSprites = function(userPokemonImg, userPokemon, opponentPokemonImg, opponentPokemon) {
+    $(userPokemonImg).attr('src', 'assets/images/' + userPokemon.name.toLowerCase() + 'back.gif');
+    $(opponentPokemonImg).attr('src', 'assets/images/' + opponentPokemon.name.toLowerCase() + '.gif');
     
 }
 
@@ -177,11 +178,14 @@ var opponentSelect = function() {
 var battle = function() {
     $('#startButton').click(function() {
         $('.startingSetup').html('');
+        var userPokemonImg = 
+        placeSprites()
         $('.topRow').html(
             '<div class="row w-100">' +
                 '<div class="col-6 mx-auto">' +
                 '<div class="card">' +
                     '<img class="w-100" src="assets/images/PBC.png" id="arenaImg">' +
+                    '<img class="userPokemonImg">' +
                 '</div>' +
                 '</div>' +
             '</div>'
