@@ -48,3 +48,26 @@ p, button {
     width: 500px; 
     /* float: right; */
 }
+
+.userPokemonImg {
+    position: absolute;
+    float: right;
+    height: 125px;
+    width: auto;
+    bottom: 143px;
+    left: 103px;
+}
+
+.opponentPokemonImg {
+    position: absolute;
+    top: 162px;
+    right: 115px;
+    height: 100px;
+    width: auto;
+}
+
+.attackButton {
+    position: absolute;
+    bottom: 62px;
+    margin: 0 25%;
+}
