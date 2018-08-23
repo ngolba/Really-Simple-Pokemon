@@ -15,6 +15,9 @@ h1 {
     
 }
 
+h2 {
+    font-family: pokemonBody;
+}
 h3 {
     color: white;
     -webkit-text-stroke: 1px black;
@@ -70,4 +73,16 @@ p, button {
     position: absolute;
     bottom: 62px;
     margin: 0 25%;
+}
+
+.battleSetup {
+    display: none;
+}
+
+.gameOver {
+    display: none;
+}
+
+#battleText, #redText, #userAttackText, #oppAttackText {
+    display: none;
 }

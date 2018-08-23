@@ -1,13 +1,16 @@
 <!DOCTYPE <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8" />
     <title>Page Title</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+        crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" media="screen" href="assets/css/style.css" />
-    
+
 </head>
+
 <body>
     <div class="jumbotron py-0">
         <h1 class="display-4 text-center">Pokémon</h1>
@@ -15,8 +18,8 @@
     </div>
 
     <div class="container">
-        <div class = "row startingSetup topRow justify-content-center">
-            <div class="col-3 card charSelect character" name="Charmander" index=0 userPokemon = "false">
+        <div class="row startingSetup topRow justify-content-center">
+            <div class="col-3 card charSelect character" name="Charmander" index=0 userPokemon="false">
                 <div class="row">
                     <div class="col-6">
                         <img id="charmander" src="assets/images/charmander.png" height="100px" width="100px">
@@ -34,36 +37,36 @@
                     </div>
                 </div>
             </div>
-            <div class="col-3 card charSelect character" name="Bulbasaur" index=1 userPokemon = "false" >
+            <div class="col-3 card charSelect character" name="Bulbasaur" index=1 userPokemon="false">
                 <div class="row">
                     <div class="col-6">
                         <img id="bulbasaur" src="assets/images/bulbasaur.png" height="100px" width="100px">
                     </div>
-                    <div class="col-6"> 
+                    <div class="col-6">
                         <p>HP: 45</p>
                         <p>Att: 49</p>
                         <p>Def: 65</p>
                         <p>Spd: 45</p>
-                    </div>    
-                </div> 
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col-12">
                         <p class="card-body">Bulbasaur :L50</p>
                     </div>
-                </div> 
+                </div>
             </div>
-            <div class="col-3 card charSelect character" name="Squirtle" index=2 userPokemon = "false" >
+            <div class="col-3 card charSelect character" name="Squirtle" index=2 userPokemon="false">
                 <div class="row">
                     <div class="col-6">
                         <img id="squirtle" src="assets/images/squirtle.png" height="100px" width="100px">
-                        
+
                     </div>
-                    <div class="col-6"> 
+                    <div class="col-6">
                         <p>HP: 44</p>
                         <p>Att: 48</p>
                         <p>Def: 65</p>
                         <p>Spd: 43</p>
-                    </div>  
+                    </div>
                 </div>
                 <div class="row">
                     <div class="col-12">
@@ -71,17 +74,17 @@
                     </div>
                 </div>
             </div>
-            <div class="col-3 card charSelect character" name="Pikachu" index=3 userPokemon = "false" >
+            <div class="col-3 card charSelect character" name="Pikachu" index=3 userPokemon="false">
                 <div class="row">
                     <div class="col-6">
                         <img id="pikachu" src="assets/images/pikachu.png" height="100px" width="100px">
-                    </div>  
-                    <div class="col-6"> 
+                    </div>
+                    <div class="col-6">
                         <p>HP: 35</p>
                         <p>Att: 55</p>
                         <p>Def: 30</p>
                         <p>Spd: 90</p>
-                    </div>  
+                    </div>
                 </div>
                 <div class="row">
                     <div class="col-12">
@@ -94,7 +97,7 @@
             <div class="col-4 p-0">
                 <div class="card h-25">
                     <img class="oak h-100" src="assets/images/oak.jpg">
-                </div>  
+                </div>
             </div>
             <div class="col-4 p-0">
                 <div class="card" id="oakText">
@@ -103,30 +106,63 @@
                 </div>
             </div>
             <div class="col-4 p-0" id="areSure">
-                <div class="card"  >
-                    <p class="card-text text-center">You've chosen <span id="pokeChoice"></span>.</p>
-                    <p class="card-text text-center yesNo" >Are you sure?</p>
-                    
-                    <div class="row">
-                        <div class="col-6"><button type="button" class="btn-light w-100 yesNo yesNoBttn" value="Yes">Yes</button></div>  
-                        <div class="col-6"><button type="button" class="btn-light w-100 yesNo yesNoBttn" value="No">No</button></div>
+                <div class="card">
+                    <p class="card-text text-center">You've chosen
+                        <span id="pokeChoice"></span>.</p>
+                    <p class="card-text text-center yesNo">Are you sure?</p>
 
-                    </div>  
-                    
+                    <div class="row">
+                        <div class="col-6">
+                            <button type="button" class="btn-light w-100 yesNo yesNoBttn" value="Yes">Yes</button>
+                        </div>
+                        <div class="col-6">
+                            <button type="button" class="btn-light w-100 yesNo yesNoBttn" value="No">No</button>
+                        </div>
+
+                    </div>
+
                 </div>
-            </div> 
+            </div>
             <!-- <div class="col 3 p-0">
                 <div class="card" id="opponentChoice">
                     <p class="card-text p-2"></p>
                 </div>
             </div> -->
         </div>
+        <div class="row battleSetup topRow justify-content-center">
+                <div class="row w-100">
+                    <div class="col-6 mx-auto">
+                        <div class="card">
+                            <p class="card-text oppHpBar">
+                                <span id="oppCurrentHp"></span> / 
+                                <span id="oppMaxHp"></span>
+                            </p>
+                            <img class="opponentPokemonImg" src="assets/images/pikachu.gif">
+                            <img class="w-100" src="assets/images/PBC.png" id="arenaImg">
+                            <img class="userPokemonImg" src="assets/images/charmanderback.gif">
+                            <p class="card-text userHpBar">
+                                <span id="userCurrentHp"></span> / 
+                                <span id="userMaxHp"></span>
+                            </p>
+                            <button type="button" class="btn btn-light attackButton">Use: <span id="attackName"></span></button>
+                            <p class="card-text" id="battleText">Red wants to battle!</p>
+                            <p class="card-text" id="redText"></p>
+                            <p class="card-text" id="userAttackText"></p>
+                            <p class="card-text" id="oppAttackText"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="jumbotron gameOver">
+                <h1 class="display-4 text-center">Game Over</h1>
+            </div>
     </div>
-    
-<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-<script src="assets/js/game.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="assets/js/game.js"></script>
 
 </body>
+
 </html>
 
 
@@ -135,3 +171,4 @@
         <img src="assets/images/PBC.png">
     </div>
 </div> -->
+

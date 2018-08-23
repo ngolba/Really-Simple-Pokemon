@@ -1,7 +1,8 @@
 var charmander = {
-    name: 'Charmander',
+    name: 'Charmander'.toUpperCase(),
     index: 0,
     hp: 39 * 5,
+    currentHp: 39 * 5,
     att: 52,
     def: 43,
     speed: 65,
@@ -12,9 +13,10 @@ var charmander = {
 }
 
 var bulbasaur = {
-    name: 'Bulbasaur',
+    name: 'Bulbasaur'.toUpperCase(),
     index: 1,
     hp: 45 * 5,
+    currentHp: 45 * 5,
     att: 49,
     def: 65,
     speed: 45,
@@ -25,9 +27,10 @@ var bulbasaur = {
 }
 
 var squirtle = {
-    name: 'Squirtle',
+    name: 'Squirtle'.toUpperCase(),
     index: 2,
     hp: 44 * 5,
+    currentHp: 44 * 5,
     att: 48,
     def: 65,
     speed: 43,
@@ -38,9 +41,10 @@ var squirtle = {
 }
 
 var pikachu = {
-    name: 'Pikachu',
+    name: 'Pikachu'.toUpperCase(),
     index: 3,
     hp: 35 * 5,
+    currentHp: 35 * 5,
     att: 55,
     def: 30,
     speed: 90,
@@ -53,32 +57,45 @@ var pikachu = {
 var typeAdvantageFire = [.5, 2, .5, 1];
 var typeAdvantageGrass = [.5, .5, 2, 1];
 var typeAdvantageWater = [2, .5, .5, 1];
-var typeAdvantageElectric = [1, 1, 2, .5];
+var typeAdvantageElectric = [1, .5, 2, .5];
 
 
-var attack = function(attacker, defender) {
-    var typeAdvantagePower;
+var attackCounter = 0
+
+var typeAdvantagePower = function (attacker, defender) {
     switch (attacker.type) {
-        
-        case 0 :
-            typeAdvantagePower = typeAdvantageFire[defender.type];
+
+        case 0:
+            return typeAdvantageFire[defender.type];
             break;
-        
-        case 1: 
-            typeAdvantagePower = typeAdvantageGrass[defender.type];
+
+        case 1:
+            return typeAdvantageGrass[defender.type];
             break;
 
         case 2:
-            typeAdvantagePower = typeAdvantageWater[defender.type];
+            return typeAdvantageWater[defender.type];
             break;
 
-        case 3: 
-            typeAdvantagePower = typeAdvantageElectric[defender.type];
+        case 3:
+            return typeAdvantageElectric[defender.type];
             break;
     }
-    var power = (attacker.att - (.5 * defender.def)) * typeAdvantagePower;
-    defender.hp -= power;
-    return  Math.trunc(defender.hp);
+}
+
+
+var attack = function (attacker, defender, attackCounter) {
+    var power = ((attacker.att - (.5 * defender.def)) * typeAdvantagePower(attacker, defender)) * Math.pow(2, attackCounter);
+    defender.currentHp -= power;
+    return Math.round(defender.currentHp);
+}
+
+var checkIfFNT = function (mon) {
+    if (mon.currentHp <= 0) {
+        return true;
+    } else {
+        return false;
+    }
 }
 
 var pokemonArray = [charmander, bulbasaur, squirtle, pikachu];
@@ -106,6 +123,7 @@ var generateRandoms = function (min, max) {
 var generateIvs = function (mon) {
     mon.hp *= generateRandoms(.75, 1.25);
     mon.hp = Math.trunc(mon.hp);
+    mon.currentHp = mon.hp;
     mon.att *= generateRandoms(.75, 1.25);
     mon.att = Math.trunc(mon.att);
     mon.def *= generateRandoms(.75, 1.25);
@@ -194,7 +212,6 @@ var opponentSelect = function () {
                 if ($(this).attr('value') === 'Yes') {
                     $('.opponentChoice').each(function (event) {
                         if ($(this).attr('userPokemon') === 'true') {
-                            console.log("Made it here");
                             index = $(this).attr('index');
                             opponentPokemon = pokemonArray[index];
                             opponentPokemonChosen = 'true';
@@ -217,7 +234,7 @@ var opponentSelect = function () {
                     $('#areSure').hide();
                 }
             })
-        
+
         }
 
     })
@@ -225,37 +242,114 @@ var opponentSelect = function () {
 
 var battleStart = function () {
     $('#startButton').click(function () {
-        $('.startingSetup').html('');
+        $('.startingSetup').hide();
+        $('.battleSetup').fadeIn(500);
         console.log(userPokemon);
         console.log(opponentPokemon);
-        var userPokemonImg = userPokemon.backSprite;
-        var opponentPokemonImg = opponentPokemon.frontSprite;
 
-        $('.topRow').html(
-            '<div class="row w-100">' +
-            '<div class="col-6 mx-auto">' +
-            '<div class="card">' +
-            '<img class="opponentPokemonImg" src="' + opponentPokemonImg + '">' +
-            '<img class="w-100" src="assets/images/PBC.png" id="arenaImg">' +
-            '<img class="userPokemonImg" src="' + userPokemonImg + '">' +
-            '<button type="button" class="btn btn-light attackButton">Use: ' + userPokemon.attackName +'</button>' +
-            '</div>' +
-            '</div>' +
-            '</div>'
+        $('#battleText').fadeIn(500).delay(1000).fadeOut(500);
+        $('#redText').text('Red sent out ' + opponentPokemon.name + '!').delay(2000).fadeIn(500);
 
-        );
 
-        
-        $('.attackButton').click(function() {
-            attack(userPokemon, opponentPokemon);
-             console.log(opponentPokemon.hp);
 
+        // $('#battleText').delay(1000).text('Red sent out ' + opponentPokemon.name + '!')
+
+        // $('#battleText').text('Red wants to battle!').fadeIn(300).delay(500).fadeOut(300).
+        // $('#battleText').text('Red sent out ' + opponentPokemon.name + '!').fadeIn();
+
+        $('.opponentPokemonImg').attr('src', opponentPokemon.frontSprite);
+        $('.userPokemonImg').attr('src', userPokemon.backSprite);
+        $('#oppCurrentHp').text(opponentPokemon.currentHp);
+        $('#oppMaxHp').text(opponentPokemon.hp);
+        $('#userCurrentHp').text(userPokemon.currentHp);
+        $('#userMaxHp').text(userPokemon.hp);
+        $('#attackName').text(userPokemon.attackName);
+
+        var userTypeAdvantage = (typeAdvantagePower(userPokemon, opponentPokemon));
+        var oppTypeAdvantage = (typeAdvantagePower(opponentPokemon, userPokemon));
+
+        var battleTextGenerate = function (userTypeAdvantage, pokemon) {
+            switch (userTypeAdvantage) {
+                case 2:
+                    return pokemon.name + ' used ' + pokemon.attackName + '! It\'s super effective!';
+                    break;
+                case 1:
+                    return pokemon.name + ' used ' + pokemon.attackName + '!';
+                    break;
+                case .5:
+                    return pokemon.name + ' used ' + pokemon.attackName + '! It\'s not very effective...';
+                    break;
+            }
+
+
+        }
+
+
+
+        $('.attackButton').click(function () {
+
+            $('#redText').hide();
+            $('#userAttackText').hide();
+            $('#oppAttackText').hide();
+
+            if (userPokemon.speed > opponentPokemon.speed) {
+                attack(userPokemon, opponentPokemon, attackCounter);
+                $("#userAttackText").text(battleTextGenerate(userTypeAdvantage, userPokemon)).fadeIn(200).delay(2000).fadeOut(200);
+                console.log("Opponent Starting HP " + opponentPokemon.hp + " Current HP " + opponentPokemon.currentHp);
+                if (!checkIfFNT(opponentPokemon)) {
+                    attack(opponentPokemon, userPokemon, 0);
+                    $("#oppAttackText").text(battleTextGenerate(oppTypeAdvantage, opponentPokemon)).delay(2400).fadeIn(200);
+                    console.log("User Starting HP " + userPokemon.hp + " Current HP " + userPokemon.currentHp);
+                    $('#oppCurrentHp').text(opponentPokemon.currentHp);
+                    attackCounter++;
+                    console.log(attackCounter);
+                } else {
+                    $('.opponentPokemonImg').delay(2400).slideUp(300);
+                    $('.oppHpBar').text("FNT");
+                    $('#battleText').delay(2400).fadeIn(200).text('Enemy ' + opponentPokemon.name + ' has fainted!')
+                }
+            } else {
+                attack(opponentPokemon, userPokemon, 0);
+                $("#oppAttackText").text(battleTextGenerate(oppTypeAdvantage, opponentPokemon)).fadeIn(200).delay(2000).fadeOut(200);
+                console.log("User Starting HP " + userPokemon.hp + " Current HP " + userPokemon.currentHp);
+                attack(userPokemon, opponentPokemon, attackCounter);
+                console.log("Opponent Starting HP " + opponentPokemon.hp + " Current HP " + opponentPokemon.currentHp);
+                $("#userAttackText").text(battleTextGenerate(userTypeAdvantage, userPokemon)).delay(2400).fadeIn(200);
+                attackCounter++;
+
+                if (!checkIfFNT(opponentPokemon)) {
+                    $('#oppCurrentHp').text(opponentPokemon.currentHp);
+                } else {
+                    $('#userAttackText').delay(2000).fadeOut(200);
+                    $('.opponentPokemonImg').delay(4800).slideUp(300);
+                    $('.oppHpBar').text("FNT");
+                    $('#battleText').delay(4800).fadeIn(200).text('Enemy ' + opponentPokemon.name + ' has fainted!')
+                }
+
+            }
+
+            // if (opponentPokemon.currentHp > 0) {
+            //     $('#oppCurrentHp').text(opponentPokemon.currentHp);
+            //     attackCounter++;
+            //     console.log(attackCounter);
+            // } else {
+            //     $('.oppHpBar').text("FNT");
+            //     $('#battleText').text('Enemy ' + opponentPokemon.name + ' has fainted!')
+
+            // }
+
+            if (userPokemon.currentHp > 0) {
+                $('#userCurrentHp').text(userPokemon.currentHp);
+            } else {
+                $('.userHpBar').text("FNT");
+                $('.battleSetup').hide();
+                $('.gameOver').show();
+
+            }
         })
-
-    
-});
+    });
 };
-var attackSequence = function (){};
+var attackSequence = function () {};
 
 $(document).ready(function () {
 
@@ -270,126 +364,5 @@ $(document).ready(function () {
 
 
     startGame();
-    $('.yesNoOpp').click(function () {
-        console.log("clicked");
-    })
-
-    
-
-
-
-
-    // $('.charSelect').each(function(){
-    //     console.log($(this).attr('name'));
-    //     if ($(this).attr('userPokemon') === true){
-    //         userPokemon = pokemonArray[$(this).attr('index')];
-    //         console.log(userPokemon);
-    //     }else {
-    //         console.log("Failure");
-    //     }
-    // });
-
-
-
-
-    // $('.charSelect').each(function() {
-    //     if ($('.charSelect').attr('userPokemon') === true){
-    //         userPokemon = (pokemonArray[$(this).attr('index')]);
-    //         console.log(userPokemon);
-    //     };
-    // });
-
-
-
-
-
-    /// Working Test 
-
-    //     $('.charSelect').click(function(event){
-    //         $('#pokeChoice').text($(this).attr('name'));
-    //         $("#areSure").show();
-    //         userPokemon = pokemonArray[$(this).attr('index')];
-    //         console.log(userPokemon);
-    //         $(this).attr('userPokemon', true);
-    //         $(this).siblings('.charSelect').attr('userPokemon', false);
-
-
-
-    //         $('.yesNo').click(function(event){
-    //             if ($(this).attr('value') === 'Yes'){
-    //                 $('#oakText').html('<p class="card-body pb-0">' + 'Oak: Your pokémon will be ' + userPokemon.name + '.' + '<p class="card-body pb-0">' + 'Choose your opponent.' + '</p>');
-    //                 $('#areSure').hide();
-    //                 userPokemonChosen = true;
-    //                 // $(this).attr('userPokemon', 'true');
-    //                 // if ($('.charSelect').attr('userPokemon') === false){
-    //                 // $('.charSelect').siblings('.charSelect').addClass('opponentSelect');
-    //                 // }
-    //                 $('.charSelect').off('click');
-
-    //             } else {
-    //                 $('#areSure').hide();
-    //                 userPokemon = '';
-    //                 console.log(userPokemon);
-    //             }
-    //     });
-
-    //     $('.opponentSelect').click(function(event){
-    //         $('#pokeChoice').text($(this).attr('name'));
-    //         $("#areSure").show();
-    //         opponentPokemon = pokemonArray[$(this).attr('index')];
-    //         console.log(opponentPokemon);
-
-    //         $('.yesNo').click(function(event){
-    //             if ($(this).attr('value') === 'Yes'){
-    //                 $('#oakText').html('<p class="card-body pb-0">' + 'Oak: Your opponent\'s pokémon will be ' + opponentPokemon.name + '.' + '<p class="card-body pb-0">' + 'Choose your opponent.' + '</p>');
-    //                 $('#areSure').hide();
-    //                 opponentPokemonChosen = true;
-    //                 $('.charSelect').off('click')
-    //             } else {
-    //                 $('#areSure').hide();
-    //             }
-    //     });
-    //     });
-
-    // });
-
-    // ///////////////////////////
-
-    //////////////////////// test 2 
-
-
-    // $('.opponentSelect').click(function(event){
-    //     $('#pokeChoice').text($(this).attr('name'));
-    //     $("#areSure").show();
-    //     opponentPokemon = pokemonArray[$(this).attr('index')];
-    //     console.log(opponentPokemon);
-
-    //     $('.yesNo').click(function(event){
-    //         if ($(this).attr('value') === 'Yes'){
-    //             $('#oakText').html('<p class="card-body pb-0">' + 'Oak: Your opponent\'s pokémon will be ' + opponentPokemon.name + '.' + '<p class="card-body pb-0">' + 'Choose your opponent.' + '</p>');
-    //             $('#areSure').hide();
-    //             opponentPokemonChosen = true;
-    //             $('.charSelect').off('click')
-    //         } else {
-    //             $('#areSure').hide();
-    //         }
-    // });
-    // });
-
-    ///////////////////
-
-
-
-
-
-    // console.log(userPokemon);
-
-
-
-
-
-
-
-
 
 });
