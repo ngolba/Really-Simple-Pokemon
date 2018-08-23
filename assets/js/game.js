@@ -59,7 +59,7 @@ var typeAdvantageGrass = [.5, .5, 2, 1];
 var typeAdvantageWater = [2, .5, .5, 1];
 var typeAdvantageElectric = [1, .5, 2, .5];
 
-
+var battleCounter = 0;
 var attackCounter = 0
 
 var typeAdvantagePower = function (attacker, defender) {
@@ -101,10 +101,13 @@ var checkIfFNT = function (mon) {
 var pokemonArray = [charmander, bulbasaur, squirtle, pikachu];
 var userPokemon = {};
 var opponentPokemon;
+var secondOpponent;
+var thirdOpponent;
 var battleRoster = [userPokemon, opponentPokemon];
 var userPokemonChosen = 'false';
 var opponentPokemonChosen = 'false';
 var index = 4;
+var pokemonUsed = [];
 
 var changeSprite = function (monId, monName) {
     $(monId).hover(function () {
@@ -164,6 +167,7 @@ var startGame = function () {
                             index = $(this).attr('index');
                             userPokemon = pokemonArray[index];
                             userPokemonChosen = 'true';
+                            pokemonUsed.push(userPokemon);
                             $(this).addClass('border border-dark').removeClass('charSelect');
                             $('#areSure').hide();
                             $('#oakText').html('<p class="card-body pb-0">' + 'Oak: Your pokémon will be ' + userPokemon.name + '.' + '<p class="card-body pb-0">' + 'Double click your opponent.' + '</p>');
@@ -215,6 +219,7 @@ var opponentSelect = function () {
                             index = $(this).attr('index');
                             opponentPokemon = pokemonArray[index];
                             opponentPokemonChosen = 'true';
+                            pokemonUsed.push(opponentPokemon);
                             $(this).addClass('border border-danger col-4').removeClass('opponentChoice col-3');
                             $('#areSure').hide();
                             $('#oakText').html('<p class="card-body pb-0">' + 'Oak: Your opponent\'s pokémon will be ' + opponentPokemon.name + '.' + '<p class="card-body pb-0">' + 'Click Start to start battle!' + '</p>' + '<button type="button" class="btn btn-danger" id="startButton">' + 'Start!' + '</button>');
@@ -240,116 +245,186 @@ var opponentSelect = function () {
     })
 };
 
+var battleTwoSelect = function () {
+    var remainingOpponents = [];
+
+    $('.opponentChoice').each(function () {
+        remainingOpponents.push($(this).attr('index'))
+    });
+
+    console.log(remainingOpponents);
+
+    var nextPokemonIndex = function (array) {
+        var index = Math.floor(Math.random() * 1.99);
+        console.log(array[index]);
+        return array[index];
+    }
+    ;
+    return pokemonArray[nextPokemonIndex(remainingOpponents)];
+
+};
+
+var battleThreeSelect = function (array) {
+    for (var i = 0; i < array.length; i++){
+    if (pokemonUsed.indexOf(array[i]) === -1) {
+        return array[i];
+    }
+}
+};
+
 var battleStart = function () {
-    $('#startButton').click(function () {
-        $('.startingSetup').hide();
-        $('.battleSetup').fadeIn(500);
-        console.log(userPokemon);
-        console.log(opponentPokemon);
 
-        $('#battleText').fadeIn(500).delay(1000).fadeOut(500);
+    var userTypeAdvantage = (typeAdvantagePower(userPokemon, opponentPokemon));
+    var oppTypeAdvantage = (typeAdvantagePower(opponentPokemon, userPokemon));
+
+    var battleTextGenerate = function (userTypeAdvantage, pokemon) {
+        switch (userTypeAdvantage) {
+            case 2:
+                return pokemon.name + ' used ' + pokemon.attackName + '! It\'s super effective!';
+                break;
+            case 1:
+                return pokemon.name + ' used ' + pokemon.attackName + '!';
+                break;
+            case .5:
+                return pokemon.name + ' used ' + pokemon.attackName + '! It\'s not very effective...';
+                break;
+        }
+
+
+    }
+
+    if (battleCounter === 0) {
+
+        $('#startButton').click(function () {
+
+
+            $('.startingSetup').hide();
+            $('.battleSetup').fadeIn(500);
+            console.log(userPokemon);
+            console.log(opponentPokemon);
+
+            $('#battleText').fadeIn(500).delay(1000).fadeOut(500);
+            $('#redText').text('Red sent out ' + opponentPokemon.name + '!').delay(2000).fadeIn(500);
+
+
+
+            // $('#battleText').delay(1000).text('Red sent out ' + opponentPokemon.name + '!')
+
+            // $('#battleText').text('Red wants to battle!').fadeIn(300).delay(500).fadeOut(300).
+            // $('#battleText').text('Red sent out ' + opponentPokemon.name + '!').fadeIn();
+
+            $('.opponentPokemonImg').attr('src', opponentPokemon.frontSprite);
+            $('.userPokemonImg').attr('src', userPokemon.backSprite);
+            $('#oppCurrentHp').text(opponentPokemon.currentHp);
+            $('#oppMaxHp').text(opponentPokemon.hp);
+            $('#userCurrentHp').text(userPokemon.currentHp);
+            $('#userMaxHp').text(userPokemon.hp);
+            $('#attackName').text(userPokemon.attackName);
+
+
+
+        })
+    } else if (battleCounter === 1) {
+        opponentPokemon = battleTwoSelect();
+        pokemonUsed.push(opponentPokemon);
+        $('#pokeBallThree').attr('src', 'assets/images/pokeballFullFainted.png');
+        $('#battleText').hide();
         $('#redText').text('Red sent out ' + opponentPokemon.name + '!').delay(2000).fadeIn(500);
-
-
-
-        // $('#battleText').delay(1000).text('Red sent out ' + opponentPokemon.name + '!')
-
-        // $('#battleText').text('Red wants to battle!').fadeIn(300).delay(500).fadeOut(300).
-        // $('#battleText').text('Red sent out ' + opponentPokemon.name + '!').fadeIn();
-
-        $('.opponentPokemonImg').attr('src', opponentPokemon.frontSprite);
+        $('.secondMonImg').delay(6000).slideDown(200).attr('src', opponentPokemon.frontSprite);
+        // $('.opponentPokemonImg').delay(3000).slideDown(200).attr('src', opponentPokemon.frontSprite);
         $('.userPokemonImg').attr('src', userPokemon.backSprite);
         $('#oppCurrentHp').text(opponentPokemon.currentHp);
+        console.log(opponentPokemon.currentHp);
         $('#oppMaxHp').text(opponentPokemon.hp);
         $('#userCurrentHp').text(userPokemon.currentHp);
         $('#userMaxHp').text(userPokemon.hp);
         $('#attackName').text(userPokemon.attackName);
 
-        var userTypeAdvantage = (typeAdvantagePower(userPokemon, opponentPokemon));
-        var oppTypeAdvantage = (typeAdvantagePower(opponentPokemon, userPokemon));
+    } else if (battleCounter === 2){
+        $('.secondMonImg').slideUp(1);
+        $('#pokeBallTwo').attr('src', 'assets/images/pokeballFullFainted.png');
+        opponentPokemon = battleThreeSelect(pokemonArray);
+        console.log("Made it here");
+        console.log(opponentPokemon);
+        $('#battleText').hide();
+        $('#redText').text('Red sent out ' + opponentPokemon.name + '!').delay(2000).fadeIn(500);
+        $('.thirdMonImg').delay(6000).slideDown(200).attr('src', opponentPokemon.frontSprite);
+        // $('.opponentPokemonImg').delay(3000).slideDown(200).attr('src', opponentPokemon.frontSprite);
+        $('.userPokemonImg').attr('src', userPokemon.backSprite);
+        $('#oppCurrentHp').text(opponentPokemon.currentHp);
+        console.log(opponentPokemon.currentHp);
+        $('#oppMaxHp').text(opponentPokemon.hp);
+        $('#userCurrentHp').text(userPokemon.currentHp);
+        $('#userMaxHp').text(userPokemon.hp);
+        $('#attackName').text(userPokemon.attackName);
 
-        var battleTextGenerate = function (userTypeAdvantage, pokemon) {
-            switch (userTypeAdvantage) {
-                case 2:
-                    return pokemon.name + ' used ' + pokemon.attackName + '! It\'s super effective!';
-                    break;
-                case 1:
-                    return pokemon.name + ' used ' + pokemon.attackName + '!';
-                    break;
-                case .5:
-                    return pokemon.name + ' used ' + pokemon.attackName + '! It\'s not very effective...';
-                    break;
+    } else {
+        $('*').hide();
+        console.log("fail");
+    }
+
+    $('.attackButton').click(function () {
+
+        $('#redText').hide();
+        $('#userAttackText').hide();
+        $('#oppAttackText').hide();
+
+        if (userPokemon.speed > opponentPokemon.speed) {
+            attack(userPokemon, opponentPokemon, attackCounter);
+            $("#userAttackText").text(battleTextGenerate(userTypeAdvantage, userPokemon)).fadeIn(200).delay(2000).fadeOut(200);
+            if (!checkIfFNT(opponentPokemon)) {
+                attack(opponentPokemon, userPokemon, 0);
+                $("#oppAttackText").text(battleTextGenerate(oppTypeAdvantage, opponentPokemon)).delay(2400).fadeIn(200);
+                $('#oppCurrentHp').text(opponentPokemon.currentHp);
+                attackCounter++;
+                console.log(attackCounter);
+            } else {
+                $('.opponentPokemonImg').delay(2400).slideUp(300);
+                $('#oppCurrentHp').text("FNT");
+                $('#oppMaxHp').text();
+                $('#battleText').delay(2400).fadeIn(200).text('Enemy ' + opponentPokemon.name + ' has fainted!').delay(500).hide()
+                battleCounter++;
+                $('.attackButton').off('click');
+                battleStart();
             }
+        } else {
+            attack(opponentPokemon, userPokemon, 0);
+            $("#oppAttackText").text(battleTextGenerate(oppTypeAdvantage, opponentPokemon)).fadeIn(200).delay(2000).fadeOut(200)
+            attack(userPokemon, opponentPokemon, attackCounter);
+            $("#userAttackText").text(battleTextGenerate(userTypeAdvantage, userPokemon)).delay(2400).fadeIn(200);
+            attackCounter++;
 
+            if (!checkIfFNT(opponentPokemon)) {
+                $('#oppCurrentHp').text(opponentPokemon.currentHp);
+            } else {
+                $('#userAttackText').delay(2000).fadeOut(200);
+                $('.opponentPokemonImg').delay(4800).slideUp(300);
+                $('#oppCurrentHp').text("FNT");
+                $('#oppMaxHp').text();
+                $('#battleText').delay(2400).fadeIn(200).text('Enemy ' + opponentPokemon.name + ' has fainted!').delay(500).hide()
+                battleCounter++;
+                $('.attackButton').off('click');
+                battleStart();
+            }
 
         }
+        if (userPokemon.currentHp > 0) {
+            $('#userCurrentHp').text(userPokemon.currentHp);
+        } else {
+            $('.userHpBar').text("FNT");
+            $('.battleSetup').hide();
+            $('.gameOver').show();
+
+        }
+        return;
 
 
-
-        $('.attackButton').click(function () {
-
-            $('#redText').hide();
-            $('#userAttackText').hide();
-            $('#oppAttackText').hide();
-
-            if (userPokemon.speed > opponentPokemon.speed) {
-                attack(userPokemon, opponentPokemon, attackCounter);
-                $("#userAttackText").text(battleTextGenerate(userTypeAdvantage, userPokemon)).fadeIn(200).delay(2000).fadeOut(200);
-                console.log("Opponent Starting HP " + opponentPokemon.hp + " Current HP " + opponentPokemon.currentHp);
-                if (!checkIfFNT(opponentPokemon)) {
-                    attack(opponentPokemon, userPokemon, 0);
-                    $("#oppAttackText").text(battleTextGenerate(oppTypeAdvantage, opponentPokemon)).delay(2400).fadeIn(200);
-                    console.log("User Starting HP " + userPokemon.hp + " Current HP " + userPokemon.currentHp);
-                    $('#oppCurrentHp').text(opponentPokemon.currentHp);
-                    attackCounter++;
-                    console.log(attackCounter);
-                } else {
-                    $('.opponentPokemonImg').delay(2400).slideUp(300);
-                    $('.oppHpBar').text("FNT");
-                    $('#battleText').delay(2400).fadeIn(200).text('Enemy ' + opponentPokemon.name + ' has fainted!')
-                }
-            } else {
-                attack(opponentPokemon, userPokemon, 0);
-                $("#oppAttackText").text(battleTextGenerate(oppTypeAdvantage, opponentPokemon)).fadeIn(200).delay(2000).fadeOut(200);
-                console.log("User Starting HP " + userPokemon.hp + " Current HP " + userPokemon.currentHp);
-                attack(userPokemon, opponentPokemon, attackCounter);
-                console.log("Opponent Starting HP " + opponentPokemon.hp + " Current HP " + opponentPokemon.currentHp);
-                $("#userAttackText").text(battleTextGenerate(userTypeAdvantage, userPokemon)).delay(2400).fadeIn(200);
-                attackCounter++;
-
-                if (!checkIfFNT(opponentPokemon)) {
-                    $('#oppCurrentHp').text(opponentPokemon.currentHp);
-                } else {
-                    $('#userAttackText').delay(2000).fadeOut(200);
-                    $('.opponentPokemonImg').delay(4800).slideUp(300);
-                    $('.oppHpBar').text("FNT");
-                    $('#battleText').delay(4800).fadeIn(200).text('Enemy ' + opponentPokemon.name + ' has fainted!')
-                }
-
-            }
-
-            // if (opponentPokemon.currentHp > 0) {
-            //     $('#oppCurrentHp').text(opponentPokemon.currentHp);
-            //     attackCounter++;
-            //     console.log(attackCounter);
-            // } else {
-            //     $('.oppHpBar').text("FNT");
-            //     $('#battleText').text('Enemy ' + opponentPokemon.name + ' has fainted!')
-
-            // }
-
-            if (userPokemon.currentHp > 0) {
-                $('#userCurrentHp').text(userPokemon.currentHp);
-            } else {
-                $('.userHpBar').text("FNT");
-                $('.battleSetup').hide();
-                $('.gameOver').show();
-
-            }
-        })
     });
-};
-var attackSequence = function () {};
+}
+
+
+
+
 
 $(document).ready(function () {
 
@@ -364,5 +439,6 @@ $(document).ready(function () {
 
 
     startGame();
+   
 
 });

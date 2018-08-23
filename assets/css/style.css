@@ -57,7 +57,7 @@ p, button {
     float: right;
     height: 125px;
     width: auto;
-    bottom: 143px;
+    bottom: 142px;
     left: 103px;
 }
 
@@ -69,10 +69,27 @@ p, button {
     width: auto;
 }
 
+.secondMonImg {
+    position: absolute;
+    top: 162px;
+    right: 115px;
+    height: 100px;
+    width: auto;
+}
+
+.thirdMonImg {
+    position: absolute;
+    top: 162px;
+    right: 115px;
+    height: 100px;
+    width: auto;
+
+}
+
 .attackButton {
     position: absolute;
-    bottom: 62px;
-    margin: 0 25%;
+    bottom: 141px;
+    right: 0px;
 }
 
 .battleSetup {
@@ -83,6 +100,45 @@ p, button {
     display: none;
 }
 
-#battleText, #redText, #userAttackText, #oppAttackText {
+#battleText, #redText, #userAttackText, #oppAttackText, .secondMonImg, .thirdMonImg {
     display: none;
+}
+
+.pokeBalls {
+    height: 36px;
+    width: 40px;
+    position: absolute;
+}
+
+#pokeBallOne {
+    top: 20px;
+    left: 60px;
+}
+
+#pokeBallTwo {
+    top: 20px;
+    left: 30px;
+}
+
+#pokeBallThree {
+    top: 20px;
+    left: 0px;
+}
+
+
+#battleText, #redText, #userAttackText, #oppAttackText {
+    position: absolute;
+    bottom: 55px;
+    right: 127px;
+}
+
+.oppHpBar{
+    position: absolute;
+    top: 20px;
+    right: 0px;
+}
+.userHpBar {
+    position: absolute;
+    bottom: 161px;
+    right: 0px;
 }
