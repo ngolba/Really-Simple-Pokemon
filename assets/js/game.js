@@ -258,18 +258,17 @@ var battleTwoSelect = function () {
         var index = Math.floor(Math.random() * 1.99);
         console.log(array[index]);
         return array[index];
-    }
-    ;
+    };
     return pokemonArray[nextPokemonIndex(remainingOpponents)];
 
 };
 
 var battleThreeSelect = function (array) {
-    for (var i = 0; i < array.length; i++){
-    if (pokemonUsed.indexOf(array[i]) === -1) {
-        return array[i];
+    for (var i = 0; i < array.length; i++) {
+        if (pokemonUsed.indexOf(array[i]) === -1) {
+            return array[i];
+        }
     }
-}
 };
 
 var battleStart = function () {
@@ -325,7 +324,10 @@ var battleStart = function () {
 
         })
     } else if (battleCounter === 1) {
+
         opponentPokemon = battleTwoSelect();
+        userTypeAdvantage = (typeAdvantagePower(userPokemon, opponentPokemon));
+        oppTypeAdvantage = (typeAdvantagePower(opponentPokemon, userPokemon));
         pokemonUsed.push(opponentPokemon);
         $('#pokeBallThree').attr('src', 'assets/images/pokeballFullFainted.png');
         $('#battleText').hide();
@@ -340,10 +342,13 @@ var battleStart = function () {
         $('#userMaxHp').text(userPokemon.hp);
         $('#attackName').text(userPokemon.attackName);
 
-    } else if (battleCounter === 2){
+    } else if (battleCounter === 2) {
+
         $('.secondMonImg').slideUp(1);
         $('#pokeBallTwo').attr('src', 'assets/images/pokeballFullFainted.png');
         opponentPokemon = battleThreeSelect(pokemonArray);
+        userTypeAdvantage = (typeAdvantagePower(userPokemon, opponentPokemon));
+        oppTypeAdvantage = (typeAdvantagePower(opponentPokemon, userPokemon));
         console.log("Made it here");
         console.log(opponentPokemon);
         $('#battleText').hide();
@@ -359,8 +364,9 @@ var battleStart = function () {
         $('#attackName').text(userPokemon.attackName);
 
     } else {
-        $('*').hide();
-        console.log("fail");
+        $('.battleSetup startingSetup').hide();
+        $('.gameOver').show();
+        alert("You either won or broke something. Congrats or whatever.")
     }
 
     $('.attackButton').click(function () {
@@ -439,6 +445,6 @@ $(document).ready(function () {
 
 
     startGame();
-   
+
 
 });
