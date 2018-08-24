@@ -59,6 +59,7 @@ p, button {
     width: auto;
     bottom: 142px;
     left: 103px;
+    display: none;
 }
 
 .opponentPokemonImg {
@@ -67,6 +68,7 @@ p, button {
     right: 115px;
     height: 100px;
     width: auto;
+    display: none;
 }
 
 .secondMonImg {

@@ -312,8 +312,8 @@ var battleStart = function () {
             // $('#battleText').text('Red wants to battle!').fadeIn(300).delay(500).fadeOut(300).
             // $('#battleText').text('Red sent out ' + opponentPokemon.name + '!').fadeIn();
 
-            $('.opponentPokemonImg').attr('src', opponentPokemon.frontSprite);
-            $('.userPokemonImg').attr('src', userPokemon.backSprite);
+            $('.opponentPokemonImg').attr('src', opponentPokemon.frontSprite).slideDown(1000);
+            $('.userPokemonImg').attr('src', userPokemon.backSprite).slideDown(1000);
             $('#oppCurrentHp').text(opponentPokemon.currentHp);
             $('#oppMaxHp').text(opponentPokemon.hp);
             $('#userCurrentHp').text(userPokemon.currentHp);
@@ -330,8 +330,8 @@ var battleStart = function () {
         oppTypeAdvantage = (typeAdvantagePower(opponentPokemon, userPokemon));
         pokemonUsed.push(opponentPokemon);
         $('#pokeBallThree').attr('src', 'assets/images/pokeballFullFainted.png');
-        $('#battleText').hide();
-        $('#redText').text('Red sent out ' + opponentPokemon.name + '!').delay(2000).fadeIn(500);
+        $('#battleText').fadeOut(100);
+        $('#redText').text('Red sent out ' + opponentPokemon.name + '!').delay(4000).fadeIn(500);
         $('.secondMonImg').delay(6000).slideDown(200).attr('src', opponentPokemon.frontSprite);
         // $('.opponentPokemonImg').delay(3000).slideDown(200).attr('src', opponentPokemon.frontSprite);
         $('.userPokemonImg').attr('src', userPokemon.backSprite);
@@ -344,15 +344,15 @@ var battleStart = function () {
 
     } else if (battleCounter === 2) {
 
-        $('.secondMonImg').slideUp(1);
+        $('.secondMonImg').slideUp(200);
         $('#pokeBallTwo').attr('src', 'assets/images/pokeballFullFainted.png');
         opponentPokemon = battleThreeSelect(pokemonArray);
         userTypeAdvantage = (typeAdvantagePower(userPokemon, opponentPokemon));
         oppTypeAdvantage = (typeAdvantagePower(opponentPokemon, userPokemon));
         console.log("Made it here");
         console.log(opponentPokemon);
-        $('#battleText').hide();
-        $('#redText').text('Red sent out ' + opponentPokemon.name + '!').delay(2000).fadeIn(500);
+        $('#battleText').fadeOut(100);
+        $('#redText').text('Red sent out ' + opponentPokemon.name + '!').delay(6000).fadeIn(500);
         $('.thirdMonImg').delay(6000).slideDown(200).attr('src', opponentPokemon.frontSprite);
         // $('.opponentPokemonImg').delay(3000).slideDown(200).attr('src', opponentPokemon.frontSprite);
         $('.userPokemonImg').attr('src', userPokemon.backSprite);
@@ -364,9 +364,9 @@ var battleStart = function () {
         $('#attackName').text(userPokemon.attackName);
 
     } else {
-        $('.battleSetup startingSetup').hide();
+        $('.battleSetup .startingSetup').hide();
         $('.gameOver').show();
-        alert("You either won or broke something. Congrats or whatever.")
+        // alert("You either won or broke something. Congrats or whatever.")
     }
 
     $('.attackButton').click(function () {
@@ -374,22 +374,25 @@ var battleStart = function () {
         $('#redText').hide();
         $('#userAttackText').hide();
         $('#oppAttackText').hide();
+        $('#battleText').hide();
 
         if (userPokemon.speed > opponentPokemon.speed) {
             attack(userPokemon, opponentPokemon, attackCounter);
             $("#userAttackText").text(battleTextGenerate(userTypeAdvantage, userPokemon)).fadeIn(200).delay(2000).fadeOut(200);
             if (!checkIfFNT(opponentPokemon)) {
                 attack(opponentPokemon, userPokemon, 0);
-                $("#oppAttackText").text(battleTextGenerate(oppTypeAdvantage, opponentPokemon)).delay(2400).fadeIn(200);
+                $("#oppAttackText").text(battleTextGenerate(oppTypeAdvantage, opponentPokemon)).delay(2400).fadeIn(200).delay(2000).fadeOut(200);
                 $('#oppCurrentHp').text(opponentPokemon.currentHp);
                 attackCounter++;
                 console.log(attackCounter);
             } else {
-                $('.opponentPokemonImg').delay(2400).slideUp(300);
+                $('.opponentPokemonImg').delay(4000).slideUp(300);
                 $('#oppCurrentHp').text("FNT");
                 $('#oppMaxHp').text();
-                $('#battleText').delay(2400).fadeIn(200).text('Enemy ' + opponentPokemon.name + ' has fainted!').delay(500).hide()
+                $('#battleText').delay(2000).fadeIn(200).text('Enemy ' + opponentPokemon.name + ' has fainted!').delay(2000).fadeOut(200)
                 battleCounter++;
+                // $('#battleText').hide()
+                console.log("made it past battle text hide")
                 $('.attackButton').off('click');
                 battleStart();
             }
@@ -404,10 +407,10 @@ var battleStart = function () {
                 $('#oppCurrentHp').text(opponentPokemon.currentHp);
             } else {
                 $('#userAttackText').delay(2000).fadeOut(200);
-                $('.opponentPokemonImg').delay(4800).slideUp(300);
+                $('.opponentPokemonImg').delay(6000).slideUp(300);
                 $('#oppCurrentHp').text("FNT");
                 $('#oppMaxHp').text();
-                $('#battleText').delay(2400).fadeIn(200).text('Enemy ' + opponentPokemon.name + ' has fainted!').delay(500).hide()
+                $('#battleText').delay(2000).fadeIn(200).text('Enemy ' + opponentPokemon.name + ' has fainted!').delay(2000).fadeOut(200)
                 battleCounter++;
                 $('.attackButton').off('click');
                 battleStart();
