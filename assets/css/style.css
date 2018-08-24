@@ -131,7 +131,9 @@ p, button {
 #battleText, #redText, #userAttackText, #oppAttackText {
     position: absolute;
     bottom: 55px;
-    left: 20px;
+    /* left: 20px; */
+    padding-left: 25px;
+    padding-right: 40px;
 }
 
 .oppHpBar{

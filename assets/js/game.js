@@ -8,6 +8,8 @@ var charmander = {
     speed: 65,
     backSprite: "assets/images/charmanderback.gif",
     frontSprite: "assets/images/charmander.gif",
+    attackSound: new Audio('assets/audio/Ember.wav'),
+    cry: new Audio('assets/audio/004.wav'),
     type: 0,
     attackName: 'Ember'
 }
@@ -22,6 +24,8 @@ var bulbasaur = {
     speed: 45,
     backSprite: "assets/images/bulbasaurback.gif",
     frontSprite: "assets/images/bulbasaur.gif",
+    attackSound: new Audio('assets/audio/VineWhip.wav'),
+    cry: new Audio('assets/audio/001.wav'),
     type: 1,
     attackName: 'Vine Whip'
 }
@@ -36,6 +40,8 @@ var squirtle = {
     speed: 43,
     backSprite: "assets/images/squirtleback.gif",
     frontSprite: "assets/images/squirtle.gif",
+    attackSound: new Audio('assets/audio/Bubble.wav'),
+    cry: new Audio('assets/audio/007.wav'),
     type: 2,
     attackName: 'Bubble'
 }
@@ -50,6 +56,8 @@ var pikachu = {
     speed: 90,
     backSprite: "assets/images/pikachuback.gif",
     frontSprite: "assets/images/pikachu.gif",
+    attackSound: new Audio('assets/audio/ThunderShock.wav'),
+    cry: new Audio('assets/audio/025.wav'),
     type: 3,
     attackName: 'ThunderShock'
 }
@@ -87,11 +95,13 @@ var typeAdvantagePower = function (attacker, defender) {
 var attack = function (attacker, defender, attackCounter) {
     var power = ((attacker.att - (.5 * defender.def)) * typeAdvantagePower(attacker, defender)) * Math.pow(2, attackCounter);
     defender.currentHp -= power;
+    attacker.attackSound.play();
     return Math.round(defender.currentHp);
 }
 
 var checkIfFNT = function (mon) {
     if (mon.currentHp <= 0) {
+        mon.cry.play();
         return true;
     } else {
         return false;
@@ -108,6 +118,10 @@ var userPokemonChosen = 'false';
 var opponentPokemonChosen = 'false';
 var index = 4;
 var pokemonUsed = [];
+var openingTheme = new Audio("assets/audio/101-opening.mp3");
+var battleTheme = new Audio("assets/audio/115-battle (vs trainer).mp3")
+var victoryTheme = new Audio("assets/audio/116-victory (vs trainer).mp3");
+var defeatTheme = new Audio("assets/audio/131-lavender town's theme.mp3");
 
 var changeSprite = function (monId, monName) {
     $(monId).hover(function () {
@@ -142,13 +156,10 @@ var startGame = function () {
     generateIvs(squirtle);
     generateIvs(pikachu);
 
-
-
-
-
     $('.charSelect').click(function () {
         // userPokemon = (pokemonArray[$(this).attr('index')]);
         var userPokemonName = $(this).attr('name');
+        pokemonArray[$(this).attr('index')].cry.play();
         $('#areSure').show()
         $('#pokeChoice').text(userPokemonName);
         $(this).attr('userPokemon', true);
@@ -296,7 +307,8 @@ var battleStart = function () {
 
         $('#startButton').click(function () {
 
-
+            
+            battleTheme.play();
             $('.startingSetup').hide();
             $('.battleSetup').fadeIn(500);
             console.log(userPokemon);
@@ -325,13 +337,14 @@ var battleStart = function () {
         })
     } else if (battleCounter === 1) {
 
+        $('.opponentPokemonImg').delay(5000).slideUp(300);
         opponentPokemon = battleTwoSelect();
         userTypeAdvantage = (typeAdvantagePower(userPokemon, opponentPokemon));
         oppTypeAdvantage = (typeAdvantagePower(opponentPokemon, userPokemon));
         pokemonUsed.push(opponentPokemon);
         $('#pokeBallThree').attr('src', 'assets/images/pokeballFullFainted.png');
         $('#battleText').fadeOut(100);
-        $('#redText').text('Red sent out ' + opponentPokemon.name + '!').delay(4000).fadeIn(500);
+        $('#redText').text('Red sent out ' + opponentPokemon.name + '!').delay(7000).fadeIn(500);
         $('.secondMonImg').delay(6000).slideDown(200).attr('src', opponentPokemon.frontSprite);
         // $('.opponentPokemonImg').delay(3000).slideDown(200).attr('src', opponentPokemon.frontSprite);
         $('.userPokemonImg').attr('src', userPokemon.backSprite);
@@ -344,7 +357,7 @@ var battleStart = function () {
 
     } else if (battleCounter === 2) {
 
-        $('.secondMonImg').slideUp(200);
+        $('.secondMonImg').delay(5000).slideUp(200);
         $('#pokeBallTwo').attr('src', 'assets/images/pokeballFullFainted.png');
         opponentPokemon = battleThreeSelect(pokemonArray);
         userTypeAdvantage = (typeAdvantagePower(userPokemon, opponentPokemon));
@@ -352,8 +365,8 @@ var battleStart = function () {
         console.log("Made it here");
         console.log(opponentPokemon);
         $('#battleText').fadeOut(100);
-        $('#redText').text('Red sent out ' + opponentPokemon.name + '!').delay(6000).fadeIn(500);
-        $('.thirdMonImg').delay(6000).slideDown(200).attr('src', opponentPokemon.frontSprite);
+        $('#redText').text('Red sent out ' + opponentPokemon.name + '!').delay(7000).fadeIn(500);
+        $('.thirdMonImg').delay(8000).slideDown(200).attr('src', opponentPokemon.frontSprite);
         // $('.opponentPokemonImg').delay(3000).slideDown(200).attr('src', opponentPokemon.frontSprite);
         $('.userPokemonImg').attr('src', userPokemon.backSprite);
         $('#oppCurrentHp').text(opponentPokemon.currentHp);
@@ -364,8 +377,13 @@ var battleStart = function () {
         $('#attackName').text(userPokemon.attackName);
 
     } else {
-        $('.battleSetup .startingSetup').hide();
-        $('.gameOver').show();
+        
+        $('.thirdMonImg').delay(2000).slideUp(200);
+        $('#pokeBallOne').attr('src', 'assets/images/pokeballFullFainted.png');
+        $('#redText').text('Trainer Red has been defeated. Congratulations!').delay(8000).fadeIn(300);
+        $('.gameOver').delay(12000).fadeIn(600);
+        battleTheme.pause();
+        victoryTheme.play();
         // alert("You either won or broke something. Congrats or whatever.")
     }
 
@@ -386,10 +404,10 @@ var battleStart = function () {
                 attackCounter++;
                 console.log(attackCounter);
             } else {
-                $('.opponentPokemonImg').delay(4000).slideUp(300);
+                // $('.opponentPokemonImg').delay(4000).slideUp(300);
                 $('#oppCurrentHp').text("FNT");
                 $('#oppMaxHp').text();
-                $('#battleText').delay(2000).fadeIn(200).text('Enemy ' + opponentPokemon.name + ' has fainted!').delay(2000).fadeOut(200)
+                $('#battleText').delay(3000).fadeIn(200).text('Enemy ' + opponentPokemon.name + ' has fainted!').delay(2000).fadeOut(200)
                 battleCounter++;
                 // $('#battleText').hide()
                 console.log("made it past battle text hide")
@@ -406,11 +424,11 @@ var battleStart = function () {
             if (!checkIfFNT(opponentPokemon)) {
                 $('#oppCurrentHp').text(opponentPokemon.currentHp);
             } else {
-                $('#userAttackText').delay(2000).fadeOut(200);
-                $('.opponentPokemonImg').delay(6000).slideUp(300);
+                $('#userAttackText').delay(2600).fadeOut(200);
+                // $('.opponentPokemonImg').delay(5200).slideUp(300);
                 $('#oppCurrentHp').text("FNT");
                 $('#oppMaxHp').text();
-                $('#battleText').delay(2000).fadeIn(200).text('Enemy ' + opponentPokemon.name + ' has fainted!').delay(2000).fadeOut(200)
+                $('#battleText').delay(5200).fadeIn(200).text('Enemy ' + opponentPokemon.name + ' has fainted!').delay(2000).fadeOut(200)
                 battleCounter++;
                 $('.attackButton').off('click');
                 battleStart();
@@ -420,9 +438,16 @@ var battleStart = function () {
         if (userPokemon.currentHp > 0) {
             $('#userCurrentHp').text(userPokemon.currentHp);
         } else {
+            userPokemon.cry.play
             $('.userHpBar').text("FNT");
-            $('.battleSetup').hide();
-            $('.gameOver').show();
+            battleTheme.pause();
+            defeatTheme.play();
+            $('#userAttackText').hide()
+            $('#oppAttackText').hide();
+            $('.userPokemonImg').slideUp(400);
+            $('#battleText').text("You blacked out!").fadeIn(200);
+            $('.battleSetup').delay(2000).css('opacity', '0.2');
+            $('.gameOver').fadeIn(10000);
 
         }
         return;
@@ -442,6 +467,7 @@ $(document).ready(function () {
     changeSprite('#charmander', 'charmander');
     changeSprite('#squirtle', 'squirtle');
     changeSprite('#pikachu', 'pikachu');
+    
 
     $('#oakText').html('<p class="card-body pb-0">' + 'Oak: Here, take one of these rare pokémon.' + '</p>' +
         '<p class="card-body py-0">' + 'Choose wisely. You may only choose one! ' + '</p>');
