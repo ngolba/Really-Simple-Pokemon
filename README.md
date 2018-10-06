@@ -1,3 +1,2 @@
 # unit-4-game
-
-Please press my buttons slowly. I'm fragile. 
+This was written with one week of JavaScript experience. It was a journey into the unknown.
