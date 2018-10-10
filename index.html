@@ -20,10 +20,10 @@
 
     <div class="container">
         <div class="row startingSetup topRow justify-content-center">
-            <div class="col-3 card charSelect character" name="Charmander" index=0 userPokemon="false">
+            <div class="col-3 card charSelect character" name="charmander" index=0 userPokemon="false">
                 <div class="row">
                     <div class="col-6">
-                        <img id="charmander" src="assets/images/charmander.png" height="100px" width="100px">
+                        <img id="CHARMANDER" src="assets/images/charmander.png" height="100px" width="100px">
                     </div>
                     <div class="col-6">
                         <p>HP: 39</p>
@@ -38,10 +38,10 @@
                     </div>
                 </div>
             </div>
-            <div class="col-3 card charSelect character" name="Bulbasaur" index=1 userPokemon="false">
+            <div class="col-3 card charSelect character" name="bulbasaur" index=1 userPokemon="false">
                 <div class="row">
                     <div class="col-6">
-                        <img id="bulbasaur" src="assets/images/bulbasaur.png" height="100px" width="100px">
+                        <img id="BULBASAUR" src="assets/images/bulbasaur.png" height="100px" width="100px">
                     </div>
                     <div class="col-6">
                         <p>HP: 45</p>
@@ -56,10 +56,10 @@
                     </div>
                 </div>
             </div>
-            <div class="col-3 card charSelect character" name="Squirtle" index=2 userPokemon="false">
+            <div class="col-3 card charSelect character" name="squirtle" index=2 userPokemon="false">
                 <div class="row">
                     <div class="col-6">
-                        <img id="squirtle" src="assets/images/squirtle.png" height="100px" width="100px">
+                        <img id="SQUIRTLE" src="assets/images/squirtle.png" height="100px" width="100px">
 
                     </div>
                     <div class="col-6">
@@ -75,10 +75,10 @@
                     </div>
                 </div>
             </div>
-            <div class="col-3 card charSelect character" name="Pikachu" index=3 userPokemon="false">
+            <div class="col-3 card charSelect character" name="pikachu" index=3 userPokemon="false">
                 <div class="row">
                     <div class="col-6">
-                        <img id="pikachu" src="assets/images/pikachu.png" height="100px" width="100px">
+                        <img id="PIKACHU" src="assets/images/pikachu.png" height="100px" width="100px">
                     </div>
                     <div class="col-6">
                         <p>HP: 35</p>
@@ -101,67 +101,61 @@
                 </div>
             </div>
             <div class="col-4 p-0">
-                <div class="card" id="oakText">
-                    <!-- <p class="card-body pb-0">Oak: Here, take one of these rare pokemon.</p>
-                    <p class="card-body py-0">Choose wisely. You may only choose one!</p> -->
+                <div class="card">
+                    <p class="card-body pb-0" id="oakText">Oak: Here, take one of these rare pokemon.
+                        Choose wisely. You may only choose one!</p>
                 </div>
             </div>
             <div class="col-4 p-0" id="areSure">
                 <div class="card">
-                    <p class="card-text text-center">You've chosen
-                        <span id="pokeChoice"></span>.</p>
-                    <p class="card-text text-center yesNo">Are you sure?</p>
-
-                    <div class="row">
-                        <div class="col-6">
-                            <button type="button" class="btn-light w-100 yesNo yesNoBttn" value="Yes">Yes</button>
-                        </div>
-                        <div class="col-6">
-                            <button type="button" class="btn-light w-100 yesNo yesNoBttn" value="No">No</button>
-                        </div>
-
+                    <div class="card-body">
+                        <p class="card-text text-center" id="pokeChoice"></p>
+                        <p class="card-text text-center yesNo">Are you sure?</p>
+                        <button type="button" class="btn btn-outline-dark yesNo yesNoBttn" id="yesBtn" >Yes</button>
+                        <button type="button" class="btn btn-outline-dark yesNo yesNoBttn" id="noBtn">No</button>
                     </div>
-
                 </div>
+
             </div>
-            <!-- <div class="col 3 p-0">
+        </div>
+        <!-- <div class="col 3 p-0">
                 <div class="card" id="opponentChoice">
                     <p class="card-text p-2"></p>
                 </div>
             </div> -->
-        </div>
-        <div class="row battleSetup topRow justify-content-center">
-                <div class="row w-100">
-                    <div class="col-6 mx-auto">
-                        <div class="card">
-                            <img class="pokeBalls" id="pokeBallOne" src="assets/images/pokeballFullEdited.png">
-                            <img class="pokeBalls" id="pokeBallTwo" src="assets/images/pokeballFullEdited.png">
-                            <img class="pokeBalls" id="pokeBallThree" src="assets/images/pokeballFullEdited.png">
-                            <p class="card-text oppHpBar">
-                                <span id="oppCurrentHp"></span> / 
-                                <span id="oppMaxHp"></span>
-                            </p>
-                            <img class="opponentPokemonImg" src="assets/images/pikachu.gif">
-                            <img class="secondMonImg">
-                            <img class="thirdMonImg">
-                            <img class="w-100" src="assets/images/PBC.png" id="arenaImg">
-                            <img class="userPokemonImg" src="assets/images/charmanderback.gif">
-                            <p class="card-text userHpBar">
-                                <span id="userCurrentHp"></span> / 
-                                <span id="userMaxHp"></span>
-                            </p>
-                            <button type="button" class="btn btn-light attackButton">Use: <span id="attackName"></span></button>
-                            <p class="card-text" id="battleText">Red wants to battle!</p>
-                            <p class="card-text" id="redText"></p>
-                            <p class="card-text" id="userAttackText"></p>
-                            <p class="card-text" id="oppAttackText"></p>
-                        </div>
-                    </div>
+    </div>
+    <div class="row battleSetup topRow justify-content-center">
+        <div class="row w-100">
+            <div class="col-6 mx-auto">
+                <div class="card">
+                    <img class="pokeBalls" id="pokeBallOne" src="assets/images/pokeballFullEdited.png">
+                    <img class="pokeBalls" id="pokeBallTwo" src="assets/images/pokeballFullEdited.png">
+                    <img class="pokeBalls" id="pokeBallThree" src="assets/images/pokeballFullEdited.png">
+                    <p class="card-text oppHpBar">
+                        <span id="oppCurrentHp"></span> /
+                        <span id="oppMaxHp"></span>
+                    </p>
+                    <img class="opponentPokemonImg" src="assets/images/pikachu.gif">
+                    <img class="secondMonImg">
+                    <img class="thirdMonImg">
+                    <img class="w-100" src="assets/images/PBC.png" id="arenaImg">
+                    <img class="userPokemonImg" src="assets/images/charmanderback.gif">
+                    <p class="card-text userHpBar">
+                        <span id="userCurrentHp"></span> /
+                        <span id="userMaxHp"></span>
+                    </p>
+                    <button type="button" class="btn btn-light attackButton">Use: <span id="attackName"></span></button>
+                    <p class="card-text" id="battleText">Red wants to battle!</p>
+                    <p class="card-text" id="redText"></p>
+                    <p class="card-text" id="userAttackText"></p>
+                    <p class="card-text" id="oppAttackText"></p>
                 </div>
             </div>
-            <div class="jumbotron gameOver">
-                <h1 class="display-4 text-center">Game Over</h1>
-            </div>
+        </div>
+    </div>
+    <div class="jumbotron gameOver">
+        <h1 class="display-4 text-center">Game Over</h1>
+    </div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
@@ -177,4 +171,3 @@
         <img src="assets/images/PBC.png">
     </div>
 </div> -->
-
