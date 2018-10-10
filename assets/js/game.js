@@ -35,22 +35,21 @@ const typeAdvantages = {
 }
 const player = {
     pokemon: {},
-    name: '',
-    gender: ''
+    name: 'player',
+    gender: '',
+    oakText: 'Oak: Here, take one of these rare pokemon. Choose wisely. You may only choose one!'
 };
 const cpuOpponent = {
-    pokemon: {}
+    pokemon: {},
+    name: 'cpu',
+    oakText: 'Choose your opponent!'
 };
 
 var generateRandoms = (min, max) => (Math.random() * (max - min) + min);
 
-const gameStart = (gameStart) => {
+const gameStart = () => {
     return new Promise((resolve, reject) => {
-        if (gameStart) {
-            return resolve("I ran")
-        } else {
-            return reject(new Error('Error'))
-        }
+        resolve("I ran");
     })
 }
 
@@ -64,7 +63,7 @@ const animateSprites = () => {
                 $(event.currentTarget).attr('src', currentMon.media.frontSpriteStill);
             })
         }
-        return resolve("Sprites Animated");
+        resolve("Sprites Animated");
     })
 };
 
@@ -75,53 +74,28 @@ const generateStats = () => {
             currentMon.adjustedStats = currentMon.baseStats.map(stat => Math.trunc(stat * generateRandoms(0.75, 1.25)));
         }
         console.log(allMons);
-        return resolve("Stats Generated");
+        resolve("Stats Generated");
     })
 };
 
-const playerSelect = () => {
+const pokeSelect = (user, remainingMon) => {
     return new Promise((resolve, reject) => {
-        let playerSelection = {};
-        $('.character').click(() => {
-            console.log("character clicked player")
-            playerSelection = allMons[$(event.currentTarget).attr('index')];
-            $('#pokeChoice').empty().text(`You've chosen ${playerSelection.name}.`);
-            $('#areSure').slideDown();
-        })
-
-        $('#noBtn').click(() => {
-            $('#areSure').slideUp(200);
-        })
-
-        $('#yesBtn').click(() => {
-            $('.character').off('click')
-            $('#areSure').slideUp(500);
-            player.pokemon = playerSelection;
-            remainingMon = remainingMon.filter(mon => mon != playerSelection)
-            console.log(player.pokemon)
-            return resolve(remainingMon)
-        })
-
-
-    })
-};
-
-const opponentSelect = (remainingMon) => {
-    return new Promise((resolve, reject) => {
+        $('#oakText').text(user.oakText)
         let tentativePick = {}
-        let cpuSelection = {};
+        let userSelection = {};
         $('.character').click(() => {
-            console.log("character clicked cpu")
+            console.log(`${user.name} clicked character`)
             tentativePick = allMons[$(event.currentTarget).attr('index')];
             if (remainingMon.indexOf(tentativePick) != -1) {
-                cpuSelection = tentativePick;
-                $('#pokeChoice').empty().text(`You've chosen ${cpuSelection.name}.`);
+                userSelection = tentativePick;
+                $('#pokeChoice').empty().text(`You've chosen ${userSelection.name}.`);
                 $('.yesNo').show()
                 $('#areSure').slideDown();
             } else {
                 $('#pokeChoice').empty().text(`You've already chosen this Pokemon. Choose again.`)
                 $('.yesNo').hide()
-                cpuSelection = {};
+                $('#areSure').slideDown();
+                userSelection = {};
             }
         })
 
@@ -132,38 +106,29 @@ const opponentSelect = (remainingMon) => {
         $('#yesBtn').click(() => {
             $('.character').off('click')
             $('#areSure').slideUp(500);
-            cpuOpponent.pokemon = cpuSelection;
-            remainingMon = remainingMon.filter(mon => mon != cpuSelection)
-            console.log(cpuOpponent.pokemon)
-            return resolve(remainingMon)
+            user.pokemon = userSelection;
+            remainingMon = remainingMon.filter(mon => mon != userSelection)
+            console.log(`${user.name} ${user.pokemon.name}`)
+            resolve(remainingMon)
         })
-
-
     })
 };
 
 
-const firstBattleSetup = (playerSelection) => {};
+const firstBattleSetup = (remainingMon) => {
+    $('#oakRow').slideUp();
+    $(`#${remainingMon[0].name}Card`).slideUp();
+    $(`#${remainingMon[1].name}Card`).slideUp();
+};
 const setStage = (combatants) => {}
 
 $(document).ready(() => {
-gameStart(true)
-    .then((data) => {
-        console.log(data)
-        return animateSprites()
-    })
-    .then((data) => {
-        console.log(data)
-        return generateStats()
-    })
-    .then((data) => {
-        console.log(data)
-        return playerSelect()
-    })
-    .then((data) => {
-        console.log(data)
-        return opponentSelect(data)
-    })
+    gameStart(true)
+        .then(() => animateSprites())
+        .then(() => generateStats())
+        .then(() => pokeSelect(player, remainingMon))
+        .then(remainingMon => pokeSelect(cpuOpponent, remainingMon))
+        .then(remainingMon => firstBattleSetup(remainingMon))
 })
 
 

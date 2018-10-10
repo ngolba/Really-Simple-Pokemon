@@ -20,7 +20,7 @@
 
     <div class="container">
         <div class="row startingSetup topRow justify-content-center">
-            <div class="col-3 card charSelect character" name="charmander" index=0 userPokemon="false">
+            <div class="col-3 card charSelect character" id="CHARMANDERCard" index=0>
                 <div class="row">
                     <div class="col-6">
                         <img id="CHARMANDER" src="assets/images/charmander.png" height="100px" width="100px">
@@ -38,7 +38,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-3 card charSelect character" name="bulbasaur" index=1 userPokemon="false">
+            <div class="col-3 card charSelect character" id="BULBASAURCard" index=1>
                 <div class="row">
                     <div class="col-6">
                         <img id="BULBASAUR" src="assets/images/bulbasaur.png" height="100px" width="100px">
@@ -56,7 +56,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-3 card charSelect character" name="squirtle" index=2 userPokemon="false">
+            <div class="col-3 card charSelect character" id="SQUIRTLECard" index=2>
                 <div class="row">
                     <div class="col-6">
                         <img id="SQUIRTLE" src="assets/images/squirtle.png" height="100px" width="100px">
@@ -75,7 +75,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-3 card charSelect character" name="pikachu" index=3 userPokemon="false">
+            <div class="col-3 card charSelect character" id="PIKACHUCard" index=3>
                 <div class="row">
                     <div class="col-6">
                         <img id="PIKACHU" src="assets/images/pikachu.png" height="100px" width="100px">
@@ -94,7 +94,7 @@
                 </div>
             </div>
         </div>
-        <div class="row startingSetup justify-content-center h-100">
+        <div class="row startingSetup justify-content-center h-100"  id="oakRow">
             <div class="col-4 p-0">
                 <div class="card h-25">
                     <img class="oak h-100" src="assets/images/oak.jpg">
@@ -102,8 +102,7 @@
             </div>
             <div class="col-4 p-0">
                 <div class="card">
-                    <p class="card-body pb-0" id="oakText">Oak: Here, take one of these rare pokemon.
-                        Choose wisely. You may only choose one!</p>
+                    <p class="card-body pb-0" id="oakText"></p>
                 </div>
             </div>
             <div class="col-4 p-0" id="areSure">
@@ -118,11 +117,6 @@
 
             </div>
         </div>
-        <!-- <div class="col 3 p-0">
-                <div class="card" id="opponentChoice">
-                    <p class="card-text p-2"></p>
-                </div>
-            </div> -->
     </div>
     <div class="row battleSetup topRow justify-content-center">
         <div class="row w-100">
