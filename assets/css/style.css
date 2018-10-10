@@ -15,10 +15,11 @@ h1 {
     
 }
 
-h2 {
+* {
     font-family: pokemonBody;
 }
 h3 {
+    font-family: pokemonHeader;
     color: white;
     -webkit-text-stroke: 1px black;
 }
@@ -33,6 +34,17 @@ p, button {
     font-family: pokemonBody;
 }
 
+.selectSprite {
+    /* max-height: 150px;
+    max-width: 150px; */
+    height: 150px;
+    width: 150px;
+}
+
+.character {
+    min-width: 150px;
+    max-width: 350px;
+}
 .oak {
     /* height: 190px; */
     width: auto; 
@@ -52,7 +64,7 @@ p, button {
     /* float: right; */
 }
 
-.userPokemonImg {
+#playerPokemonImg {
     position: absolute;
     float: right;
     height: 125px;
@@ -62,7 +74,7 @@ p, button {
     display: none;
 }
 
-.opponentPokemonImg {
+#cpuOpponentPokemonImg {
     position: absolute;
     top: 162px;
     right: 115px;
@@ -88,7 +100,7 @@ p, button {
 
 }
 
-.attackButton {
+#attackButton {
     position: absolute;
     bottom: 141px;
     right: 0px;
@@ -136,12 +148,12 @@ p, button {
     padding-right: 40px;
 }
 
-.oppHpBar{
+#oppHpBar{
     position: absolute;
     top: 20px;
     right: 0px;
 }
-.userHpBar {
+#userHpBar {
     position: absolute;
     bottom: 161px;
     right: 0px;

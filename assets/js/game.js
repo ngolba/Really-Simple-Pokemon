@@ -41,9 +41,17 @@ const player = {
 };
 const cpuOpponent = {
     pokemon: {},
-    name: 'cpu',
+    name: 'cpuOpponent',
     oakText: 'Choose your opponent!'
 };
+
+const musicTracks = {
+    openingTheme: new Audio("assets/audio/101-opening.mp3"),
+    battleTheme: new Audio("assets/audio/115-battle (vs trainer).mp3"),
+    victoryTheme: new Audio("assets/audio/116-victory (vs trainer).mp3"),
+    defeatTheme: new Audio("assets/audio/131-lavender town's theme.mp3")
+};
+let attackInProgress = false;
 
 var generateRandoms = (min, max) => (Math.random() * (max - min) + min);
 
@@ -73,7 +81,6 @@ const generateStats = () => {
             let currentMon = allMons[i];
             currentMon.adjustedStats = currentMon.baseStats.map(stat => Math.trunc(stat * generateRandoms(0.75, 1.25)));
         }
-        console.log(allMons);
         resolve("Stats Generated");
     })
 };
@@ -84,7 +91,6 @@ const pokeSelect = (user, remainingMon) => {
         let tentativePick = {}
         let userSelection = {};
         $('.character').click(() => {
-            console.log(`${user.name} clicked character`)
             tentativePick = allMons[$(event.currentTarget).attr('index')];
             if (remainingMon.indexOf(tentativePick) != -1) {
                 userSelection = tentativePick;
@@ -108,7 +114,6 @@ const pokeSelect = (user, remainingMon) => {
             $('#areSure').slideUp(500);
             user.pokemon = userSelection;
             remainingMon = remainingMon.filter(mon => mon != userSelection)
-            console.log(`${user.name} ${user.pokemon.name}`)
             resolve(remainingMon)
         })
     })
@@ -116,11 +121,85 @@ const pokeSelect = (user, remainingMon) => {
 
 
 const firstBattleSetup = (remainingMon) => {
-    $('#oakRow').slideUp();
-    $(`#${remainingMon[0].name}Card`).slideUp();
-    $(`#${remainingMon[1].name}Card`).slideUp();
+    return new Promise((resolve, reject) => {
+        $('#oakRow').slideUp();
+        $(`#${remainingMon[0].name}Card`).slideUp();
+        $(`#${remainingMon[1].name}Card`).slideUp();
+        $('#startBtn').slideDown().click(() => {
+            musicTracks.battleTheme.play();
+            $('.startingSetup').slideUp();
+            setTimeout(() => resolve(), 500)
+        });
+    })
 };
-const setStage = (combatants) => {}
+
+const setStage = (userPokemon, cpuPokemon) => {
+    return new Promise((resolve, reject) => {
+        $('#cpuOpponentPokemonImg').attr('src', cpuPokemon.media.frontSpriteGif).slideDown()
+        $('#playerPokemonImg').attr('src', userPokemon.media.backSprite).slideDown()
+        $('.battleSetup').fadeIn()
+        $('#playerCurrentHP, #playerMaxHp').text(userPokemon.adjustedStats[0])
+        $('#cpuOpponentCurrentHP, #cpuOpponentMaxHp').text(cpuPokemon.adjustedStats[0])
+        $('#attackName').text(userPokemon.attackName);
+        $('#battleText').text('Red wants to battle!').slideDown();
+        resolve(1);
+    })
+};
+
+const checkIfFNT = (defender) => {
+    if (defender.pokemon.adjustedStats[0] <= 0) {
+        $(`#${defender.name}CurrentHp`).text('FNT')
+        defender.pokemon.media.cry.play();
+        attackInProgress = true;
+        return true;
+    }
+    $(`#${defender.name}CurrentHp`).text(defender.pokemon.adjustedStats[0])
+    return false;
+}
+
+const attack = (attacker, defender) => {
+    let typeAdvantageModifier = typeAdvantages[attacker.pokemon.type][typeArray.indexOf(defender.pokemon.type)];
+    let power = Math.floor(((attacker.pokemon.adjustedStats[1] - (defender.pokemon.adjustedStats[2] * 0.25)) * typeAdvantageModifier));  
+    defender.pokemon.adjustedStats[0] -= power;
+    console.log(`Attacker: ${attacker.name}`)
+    console.log(`Defender: ${defender.name}`)
+    return checkIfFNT(defender);
+
+}
+
+const attackSequence = () => {
+    return new Promise((resolve, reject) => {
+        attackInProgress = true;
+        let firstAttacker = (player.pokemon.adjustedStats[3] > cpuOpponent.pokemon.adjustedStats[3]) ? player : cpuOpponent;
+        let secondAttacker = (player.pokemon.adjustedStats[3] < cpuOpponent.pokemon.adjustedStats[3]) ? player : cpuOpponent;
+        if (attack(firstAttacker, secondAttacker)) {
+            return resolve(firstAttacker);
+        }
+        setTimeout(() => {
+            attackInProgress = false;
+            if (attack(secondAttacker, firstAttacker)) {
+                return resolve(secondAttacker);
+            }
+        }, 1000)
+    })
+}
+
+const processWinner = (winner) => {
+    return new Promise((resolve, reject) => {
+        
+    })
+}
+
+const battleSequence = (battleNumber) => {
+    return new Promise((resolve, reject) => {
+        $('#attackButton').on('click', () => {
+            if (!attackInProgress) {
+                attackSequence()
+                    .then((winner) => resolve(winner))
+            }
+        })
+    })
+}
 
 $(document).ready(() => {
     gameStart(true)
@@ -129,53 +208,10 @@ $(document).ready(() => {
         .then(() => pokeSelect(player, remainingMon))
         .then(remainingMon => pokeSelect(cpuOpponent, remainingMon))
         .then(remainingMon => firstBattleSetup(remainingMon))
+        .then(() => setStage(player.pokemon, cpuOpponent.pokemon))
+        .then((battleNumber) => battleSequence(battleNumber))
+        .then((winner) => processWinner(winner))
 })
-
-
-
-
-
-
-
-
-
-
-
-
-// var openingTheme = new Audio("assets/audio/101-opening.mp3");
-// var battleTheme = new Audio("assets/audio/115-battle (vs trainer).mp3")
-// var victoryTheme = new Audio("assets/audio/116-victory (vs trainer).mp3");
-// var defeatTheme = new Audio("assets/audio/131-lavender town's theme.mp3");
-
-
-// var typeAdvantageFire = [.5, 2, .5, 1];
-// var typeAdvantageGrass = [.5, .5, 2, 1];
-// var typeAdvantageWater = [2, .5, .5, 1];
-// var typeAdvantageElectric = [1, .5, 2, .5];
-
-// var battleCounter = 0;
-// var attackCounter = 0
-
-// var typeAdvantagePower = function (attacker, defender) {
-//     switch (attacker.type) {
-
-//         case 0:
-//             return typeAdvantageFire[defender.type];
-//             break;
-
-//         case 1:
-//             return typeAdvantageGrass[defender.type];
-//             break;
-
-//         case 2:
-//             return typeAdvantageWater[defender.type];
-//             break;
-
-//         case 3:
-//             return typeAdvantageElectric[defender.type];
-//             break;
-//     }
-// }
 
 
 // var attack = function (attacker, defender, attackCounter) {
@@ -196,24 +232,6 @@ $(document).ready(() => {
 
 
 
-
-// var generateRandoms = function (min, max) {
-//     return Math.random() * (max - min) + min;
-
-// }
-
-
-// var generateIvs = function (mon) {
-//     mon.hp *= generateRandoms(.75, 1.25);
-//     mon.hp = Math.trunc(mon.hp);
-//     mon.currentHp = mon.hp;
-//     mon.att *= generateRandoms(.75, 1.25);
-//     mon.att = Math.trunc(mon.att);
-//     mon.def *= generateRandoms(.75, 1.25);
-//     mon.def = Math.trunc(mon.def);
-//     mon.speed *= generateRandoms(.75, 1.25);
-//     mon.speed = Math.trunc(mon.speed);
-// }
 
 // var startGame = function () {
 
