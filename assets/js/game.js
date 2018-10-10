@@ -53,13 +53,13 @@ const musicTracks = {
 };
 let attackInProgress = false;
 
-var generateRandoms = (min, max) => (Math.random() * (max - min) + min);
+const generateRandoms = (min, max) => (Math.random() * (max - min) + min);
 
 const gameStart = () => {
     return new Promise((resolve, reject) => {
         resolve("I ran");
     })
-}
+};
 
 const animateSprites = () => {
     return new Promise((resolve, reject) => {
@@ -155,17 +155,17 @@ const checkIfFNT = (defender) => {
     }
     $(`#${defender.name}CurrentHp`).text(defender.pokemon.adjustedStats[0])
     return false;
-}
+};
 
 const attack = (attacker, defender) => {
     let typeAdvantageModifier = typeAdvantages[attacker.pokemon.type][typeArray.indexOf(defender.pokemon.type)];
-    let power = Math.floor(((attacker.pokemon.adjustedStats[1] - (defender.pokemon.adjustedStats[2] * 0.25)) * typeAdvantageModifier));  
+    let power = Math.floor(((attacker.pokemon.adjustedStats[1] - (defender.pokemon.adjustedStats[2] * 0.25)) * typeAdvantageModifier));
     defender.pokemon.adjustedStats[0] -= power;
     console.log(`Attacker: ${attacker.name}`)
     console.log(`Defender: ${defender.name}`)
     return checkIfFNT(defender);
 
-}
+};
 
 const attackSequence = () => {
     return new Promise((resolve, reject) => {
@@ -182,15 +182,9 @@ const attackSequence = () => {
             }
         }, 1000)
     })
-}
+};
 
-const processWinner = (winner) => {
-    return new Promise((resolve, reject) => {
-        
-    })
-}
-
-const battleSequence = (battleNumber) => {
+const battleSequence = () => {
     return new Promise((resolve, reject) => {
         $('#attackButton').on('click', () => {
             if (!attackInProgress) {
@@ -199,7 +193,25 @@ const battleSequence = (battleNumber) => {
             }
         })
     })
+};
+
+const changeOpponent = (remainingMon) => {
+    cpuOpponent.pokemon = remainingMon[Math.floor(generateRandoms(0, remainingMon.length))]
+    $('#cpuOpponentPokemonImg').attr('src', cpuOpponent.pokemon.media.frontSpriteGif).slideDown()
+    $('#cpuOpponentCurrentHP, #cpuOpponentMaxHp').text(cpuOpponent.pokemon.adjustedStats[0])
+    $('#battleText').text(`Red sent out ${cpuOpponent.pokemon.name}`).slideDown();
 }
+const processWinner = (winner) => {
+    return new Promise((resolve, reject) => {
+        if (winner === player) {
+            $('#cpuOpponentPokemonImg').slideUp();
+            console.log(remainingMon)
+            remainingMon.splice(remainingMon.indexOf(cpuOpponent.pokemon), 1);
+            console.log(remainingMon)
+            setTimeout(() => changeOpponent(remainingMon), 2000);
+        }
+    })
+};
 
 $(document).ready(() => {
     gameStart(true)
@@ -209,7 +221,7 @@ $(document).ready(() => {
         .then(remainingMon => pokeSelect(cpuOpponent, remainingMon))
         .then(remainingMon => firstBattleSetup(remainingMon))
         .then(() => setStage(player.pokemon, cpuOpponent.pokemon))
-        .then((battleNumber) => battleSequence(battleNumber))
+        .then(() => battleSequence())
         .then((winner) => processWinner(winner))
 })
 
