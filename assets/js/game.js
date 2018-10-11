@@ -15,12 +15,13 @@ class Pokemon {
     cry() {
         return this.media.cry.play();
     }
-    attack() {
+    attackSound() {
         return this.media.attackSound.play();
     }
 }
 
-const charmander = new Pokemon('CHARMANDER', 195, 52, 43, 65, 'fire', 'Ember');
+const charmander = new Pokemon('CHARMANDER', 500, 150, 150, 65, 'fire', 'Ember'); //// OP mon for debugging
+// const charmander = new Pokemon('CHARMANDER', 195, 52, 43, 65, 'fire', 'Ember');
 const bulbasaur = new Pokemon('BULBASAUR', 225, 49, 65, 45, 'grass', 'Vine Whip');
 const squirtle = new Pokemon('SQUIRTLE', 220, 48, 65, 43, 'water', 'Bubble');
 const pikachu = new Pokemon('PIKACHU', 175, 55, 30, 90, 'electric', 'ThunderShock');
@@ -149,48 +150,65 @@ const setStage = (userPokemon, cpuPokemon) => {
 const checkIfFNT = (defender) => {
     if (defender.pokemon.adjustedStats[0] <= 0) {
         $(`#${defender.name}CurrentHp`).text('FNT')
-        defender.pokemon.media.cry.play();
-        attackInProgress = true;
+        $(`#battleText`).text(`Enemy ${defender.pokemon.name} has fainted!`)
+        defender.pokemon.cry();
         return true;
     }
     $(`#${defender.name}CurrentHp`).text(defender.pokemon.adjustedStats[0])
     return false;
 };
 
-const attack = (attacker, defender) => {
-    let typeAdvantageModifier = typeAdvantages[attacker.pokemon.type][typeArray.indexOf(defender.pokemon.type)];
-    let power = Math.floor(((attacker.pokemon.adjustedStats[1] - (defender.pokemon.adjustedStats[2] * 0.25)) * typeAdvantageModifier));
-    defender.pokemon.adjustedStats[0] -= power;
-    console.log(`Attacker: ${attacker.name}`)
-    console.log(`Defender: ${defender.name}`)
-    return checkIfFNT(defender);
-
+const printAttackText = (attacker, typeAdvantageModifier) => {
+    let typeEffectiveMessage = '';
+    if (typeAdvantageModifier === 2) {
+        typeEffectiveMessage = "It\'s super effective!";
+    } else if (typeAdvantageModifier === 0.5) {
+        typeEffectiveMessage = "It\'s not very effective...";
+    } else {
+        typeEffectiveMessage = '';
+    }
+    $('#battleText').text(`${attacker.pokemon.name} used ${attacker.pokemon.attackName}! ${typeEffectiveMessage}`);
 };
 
-const attackSequence = () => {
+const attack = (attacker, defender) => {
+    attacker.pokemon.attackSound();
+    let typeAdvantageModifier = typeAdvantages[attacker.pokemon.type][typeArray.indexOf(defender.pokemon.type)];
+    printAttackText(attacker, typeAdvantageModifier);
+    let power = Math.floor(((attacker.pokemon.adjustedStats[1] - (defender.pokemon.adjustedStats[2] * 0.25)) * typeAdvantageModifier));
+    defender.pokemon.adjustedStats[0] -= power;
+    return checkIfFNT(defender);
+};
+
+let attackSequence = () => {
     return new Promise((resolve, reject) => {
-        attackInProgress = true;
         let firstAttacker = (player.pokemon.adjustedStats[3] > cpuOpponent.pokemon.adjustedStats[3]) ? player : cpuOpponent;
         let secondAttacker = (player.pokemon.adjustedStats[3] < cpuOpponent.pokemon.adjustedStats[3]) ? player : cpuOpponent;
+        console.log({
+            firstAttacker,
+            secondAttacker
+        })
         if (attack(firstAttacker, secondAttacker)) {
+            console.log('attack 1')
             return resolve(firstAttacker);
         }
         setTimeout(() => {
-            attackInProgress = false;
             if (attack(secondAttacker, firstAttacker)) {
+                console.log('attack 2')
                 return resolve(secondAttacker);
             }
-        }, 1000)
+        }, 2500)
     })
 };
 
-const battleSequence = () => {
+let battleSequence = () => {
     return new Promise((resolve, reject) => {
+        attackInProgress = false;
         $('#attackButton').on('click', () => {
-            if (!attackInProgress) {
+            if (attackInProgress) {} else {
                 attackSequence()
                     .then((winner) => resolve(winner))
             }
+
         })
     })
 };
@@ -199,16 +217,19 @@ const changeOpponent = (remainingMon) => {
     cpuOpponent.pokemon = remainingMon[Math.floor(generateRandoms(0, remainingMon.length))]
     $('#cpuOpponentPokemonImg').attr('src', cpuOpponent.pokemon.media.frontSpriteGif).slideDown()
     $('#cpuOpponentCurrentHP, #cpuOpponentMaxHp').text(cpuOpponent.pokemon.adjustedStats[0])
-    $('#battleText').text(`Red sent out ${cpuOpponent.pokemon.name}`).slideDown();
+    $('#battleText').text(`Red sent out ${cpuOpponent.pokemon.name}!`).slideDown();
 }
+
 const processWinner = (winner) => {
     return new Promise((resolve, reject) => {
         if (winner === player) {
-            $('#cpuOpponentPokemonImg').slideUp();
-            console.log(remainingMon)
-            remainingMon.splice(remainingMon.indexOf(cpuOpponent.pokemon), 1);
-            console.log(remainingMon)
-            setTimeout(() => changeOpponent(remainingMon), 2000);
+            $('#cpuOpponentPokemonImg').delay(800).slideUp();
+            $('#battleText').delay(800).slideUp();
+            remainingMon = remainingMon.filter(mon => (mon != player.pokemon) && (mon != cpuOpponent.pokemon))
+            setTimeout(() => {
+                changeOpponent(remainingMon)
+                resolve()
+            }, 2000);
         }
     })
 };
@@ -222,8 +243,13 @@ $(document).ready(() => {
         .then(remainingMon => firstBattleSetup(remainingMon))
         .then(() => setStage(player.pokemon, cpuOpponent.pokemon))
         .then(() => battleSequence())
-        .then((winner) => processWinner(winner))
+        .then(winner => processWinner(winner))
+        .then(() => battleSequence())
+        .then(winner => processWinner(winner))
+        .then(() => battleSequence())
+        .then(winner => processWinner(winner))
 })
+
 
 
 // var attack = function (attacker, defender, attackCounter) {
