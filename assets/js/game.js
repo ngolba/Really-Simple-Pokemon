@@ -52,7 +52,6 @@ const musicTracks = {
     victoryTheme: new Audio("assets/audio/116-victory (vs trainer).mp3"),
     defeatTheme: new Audio("assets/audio/131-lavender town's theme.mp3")
 };
-let attackInProgress = false;
 
 const generateRandoms = (min, max) => (Math.random() * (max - min) + min);
 
@@ -120,7 +119,6 @@ const pokeSelect = (user, remainingMon) => {
     })
 };
 
-
 const firstBattleSetup = (remainingMon) => {
     return new Promise((resolve, reject) => {
         $('#oakRow').slideUp();
@@ -143,7 +141,7 @@ const setStage = (userPokemon, cpuPokemon) => {
         $('#cpuOpponentCurrentHP, #cpuOpponentMaxHp').text(cpuPokemon.adjustedStats[0])
         $('#attackName').text(userPokemon.attackName);
         $('#battleText').text('Red wants to battle!').slideDown();
-        resolve(1);
+        resolve();
     })
 };
 
@@ -179,7 +177,7 @@ const attack = (attacker, defender) => {
     return checkIfFNT(defender);
 };
 
-let attackSequence = () => {
+const attackSequence = () => {
     return new Promise((resolve, reject) => {
         let firstAttacker = (player.pokemon.adjustedStats[3] > cpuOpponent.pokemon.adjustedStats[3]) ? player : cpuOpponent;
         let secondAttacker = (player.pokemon.adjustedStats[3] < cpuOpponent.pokemon.adjustedStats[3]) ? player : cpuOpponent;
@@ -200,16 +198,13 @@ let attackSequence = () => {
     })
 };
 
-let battleSequence = () => {
+const battleSequence = () => {
     return new Promise((resolve, reject) => {
-        attackInProgress = false;
         $('#attackButton').on('click', () => {
-            if (attackInProgress) {} else {
-                attackSequence()
-                    .then((winner) => resolve(winner))
-            }
-
+            attackSequence()
+                .then((winner) => resolve(winner))
         })
+
     })
 };
 
@@ -230,6 +225,8 @@ const processWinner = (winner) => {
                 changeOpponent(remainingMon)
                 resolve()
             }, 2000);
+        } else {
+
         }
     })
 };
