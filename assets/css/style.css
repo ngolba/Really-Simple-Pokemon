@@ -45,6 +45,7 @@ p, button {
     min-width: 150px;
     max-width: 350px;
 }
+
 .oak {
     /* height: 190px; */
     width: auto; 
@@ -83,23 +84,6 @@ p, button {
     display: none;
 }
 
-.secondMonImg {
-    position: absolute;
-    top: 162px;
-    right: 115px;
-    height: 100px;
-    width: auto;
-}
-
-.thirdMonImg {
-    position: absolute;
-    top: 162px;
-    right: 115px;
-    height: 100px;
-    width: auto;
-
-}
-
 #attackButton {
     position: absolute;
     bottom: 141px;
@@ -124,17 +108,17 @@ p, button {
     position: absolute;
 }
 
-#pokeBallOne {
+#pokeBall0 {
     top: 20px;
     left: 60px;
 }
 
-#pokeBallTwo {
+#pokeBall1 {
     top: 20px;
     left: 30px;
 }
 
-#pokeBallThree {
+#pokeBall2 {
     top: 20px;
     left: 0px;
 }

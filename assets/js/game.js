@@ -52,6 +52,7 @@ const musicTracks = {
     victoryTheme: new Audio("assets/audio/116-victory (vs trainer).mp3"),
     defeatTheme: new Audio("assets/audio/131-lavender town's theme.mp3")
 };
+let battleCount = 0;
 
 const generateRandoms = (min, max) => (Math.random() * (max - min) + min);
 
@@ -69,6 +70,9 @@ const animateSprites = () => {
                 $(event.currentTarget).attr('src', currentMon.media.frontSpriteGif);
             }, (event) => {
                 $(event.currentTarget).attr('src', currentMon.media.frontSpriteStill);
+            })
+            $(`#${currentMon.name}`).click(() => {
+                currentMon.cry();
             })
         }
         resolve("Sprites Animated");
@@ -113,6 +117,10 @@ const pokeSelect = (user, remainingMon) => {
             $('.character').off('click')
             $('#areSure').slideUp(500);
             user.pokemon = userSelection;
+            console.log(user.pokemon.name)
+            $(`#${user.pokemon.name}Card`).addClass(`${user.name}Pick`);
+            $(`.playerPick`).addClass('border border-dark');
+            $(`.cpuOpponentPick`).addClass('border border-danger');
             remainingMon = remainingMon.filter(mon => mon != userSelection)
             resolve(remainingMon)
         })
@@ -218,6 +226,8 @@ const changeOpponent = (remainingMon) => {
 const processWinner = (winner) => {
     return new Promise((resolve, reject) => {
         if (winner === player) {
+            $(`#pokeBall${battleCount}`).attr('src', 'assets/images/pokeballFullFainted.png')
+            battleCount++;
             $('#cpuOpponentPokemonImg').delay(800).slideUp();
             $('#battleText').delay(800).slideUp();
             remainingMon = remainingMon.filter(mon => (mon != player.pokemon) && (mon != cpuOpponent.pokemon))
@@ -226,11 +236,32 @@ const processWinner = (winner) => {
                 resolve()
             }, 2000);
         } else {
-
+            musicTracks.battleTheme.pause();
+            musicTracks.defeatTheme.play();
+            $('#battleText').text('You whited out.')
+            $('.battleSetup').delay(1000).slideUp();
+            $('.gameOver').delay(1500).slideDown();
         }
     })
 };
 
+const lastFight = (winner) => {
+    if (winner === player) {
+        $(`#pokeBall${battleCount}`).attr('src', 'assets/images/pokeballFullFainted.png')
+        $('#cpuOpponentPokemonImg').delay(800).slideUp();
+        musicTracks.battleTheme.pause();
+        musicTracks.victoryTheme.play();
+        $('#battleText').text('You defeated Red!')
+        $('.battleSetup').delay(1000).slideUp();
+        $('.gameOver').delay(1500).slideDown();
+    } else {
+        musicTracks.battleTheme.pause();
+        musicTracks.defeatTheme.play();
+        $('#battleText').text('You whited out.')
+        $('.battleSetup').delay(1000).slideUp();
+        $('.gameOver').delay(1500).slideDown();
+    }
+}
 $(document).ready(() => {
     gameStart(true)
         .then(() => animateSprites())
@@ -244,5 +275,5 @@ $(document).ready(() => {
         .then(() => battleSequence())
         .then(winner => processWinner(winner))
         .then(() => battleSequence())
-        .then(winner => processWinner(winner))
+        .then(winner => lastFight(winner))
 })
