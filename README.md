@@ -1,2 +1,3 @@
 # unit-4-game
-This was written with one week of JavaScript experience. It was a journey into the unknown.
+
+A complete refactoring of an application I had written with two weeks of JavaScript experience and a dream. 
